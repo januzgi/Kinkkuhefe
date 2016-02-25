@@ -99,8 +99,8 @@
     <BundleResource Include="Content\sukkahousut.png" />
     <BundleResource Include="Content\tilli.png" />
     <BundleResource Include="Content\xboxohjain.png" />
-    <BundleResource Include="Content\aloituskuva.jpg" />
-    <BundleResource Include="Content\keittokohtaus.jpg" />
+    <BundleResource Include="Content\aloitusValikko.jpg" />
+    <BundleResource Include="Content\pelinTausta.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

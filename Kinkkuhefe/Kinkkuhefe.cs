@@ -8,8 +8,8 @@ using Jypeli.Widgets;
 public class Kinkkuhefe : PhysicsGame
 {
 	// TAUSTAKUVAT
-	Image taustakuvaalkuValikko = LoadImage("aloituskuva"); 	// Ladataan keittiöstä kuva alkuvalikon taustaksi.
-	Image keittokohtaus = LoadImage("keittokohtaus"); 			// Ladataan todellisen toiminnan aikainen näkymä.
+	Image aloitusValikko = LoadImage("aloitusValikko"); 	// Ladataan keittiöstä kuva alkuvalikon taustaksi.
+	Image pelinTausta = LoadImage("pelinTausta"); 			// Ladataan todellisen toiminnan aikainen näkymä.
 
 	// ALKUVALIKON KOHDAT LISTA
 	List<Label> valikonKohdat;
@@ -51,26 +51,42 @@ public class Kinkkuhefe : PhysicsGame
 	Image saunavihta = LoadImage("saunavihta"); 				// Lisätään saunavihta
 	*/
 
+
+	// LUODAAN ALKUVALIKKO 
+	void alkuValikko()
+	{
+		ClearAll (); 											// Tyhjennetään kenttä kaikista peliolioista
+		valikonKohdat = new List<Label> (); 					// Alustetaan lista, johon valikon kohdat tulevat
+		Level.Background.Image = aloitusValikko; 		// Ladataan keittiöstä kuva pelin aloitusruuduksi
+
+		Label kohta1 = new Label ("Aloita uusi peli");  		// Luodaan uusi Label-olio, joka toimii uuden pelin aloituskohtana
+		kohta1.Position = new Vector (0, 40);  					// Asetetaan valikon ensimmäinen kohta hieman kentän keskikohdan yläpuolelle
+		valikonKohdat.Add (kohta1);  							// Lisätään luotu valikon kohta listaan jossa kohtia säilytetään
+
+		// Lisätään kaikki luodut kohdat peliin foreach-silmukalla
+		foreach (Label valikonKohta in valikonKohdat) 
+		{
+			Add (valikonKohta);
+		}
+	}
+
+	// PÄÄOHJELMA
 	public override void Begin ()
 	{
-
 		MultiSelectWindow alkuValikko = new MultiSelectWindow("Oletko kova paistamaan kinkkua?", "OTETAAN!", "HALL OF KINKKUHEFE", "Syön mieluummin ananaspizzaa.");
-		Add(alkuValikko);
 		alkuValikko.DefaultCancel = 3;							// Peruutusnäppäimellä pelistä pihalle eli ESC poistuu pelistä kuten "Syön mieluummin ananaspizzaa"
-		Level.Background.Image = keittokohtaus; 				// Sitten tämä kun aletaan kunnolla kokkaamaan!
-		alkuValikko.Color = Color.Transparent;					// Alkuvalikon tekstistä läpinäkyvä.
+		Level.Background.Image = pelinTausta; 					// Sitten tämä kun aletaan kunnolla kokkaamaan!
+		Add(alkuValikko);
 
 		IsFullScreen = true; 									// Peli asetetaan kokonäytölle.			
-		Level.CreateVerticalBorders ();							// Pelialueelle pystysuuntaiset reunat.
-
 		Mouse.IsCursorVisible = true; 							// Hiiri näkyviin.
 
 		// MAUSTEET / AINEKSET OBJEKTEIKSI
 		// THÖ KINKKU
-		kinkku = PhysicsObject.CreateStaticObject(Level.Width * 0.25, Level.Height * 0.15);
+		kinkku = PhysicsObject.CreateStaticObject(Level.Width * 0.3, Level.Height * 0.2);
 		kinkku.Image = LoadImage("kinkku");							// Lisätään kinkku
-		kinkku.X = -200;
-		kinkku.Y = -100;
+		kinkku.X = -250;
+		kinkku.Y = -20;
 		Add (kinkku);
 
 		elamansuola = new PhysicsObject (Level.Width * 0.1, Level.Height * 0.2, Shape.Circle);
@@ -199,24 +215,6 @@ public class Kinkkuhefe : PhysicsGame
 		Keyboard.Listen (Key.Escape, ButtonState.Pressed, ConfirmExit, "Lopeta peli");
 	}
 
-	// LUODAAN ALKUVALIKKO 
-	void alkuValikko()
-	{
-		ClearAll (); 											// Tyhjennetään kenttä kaikista peliolioista
-		valikonKohdat = new List<Label> (); 					// Alustetaan lista, johon valikon kohdat tulevat
-		Level.Background.Image = taustakuvaalkuValikko; 		// Ladataan keittiöstä kuva pelin aloitusruuduksi
-
-		Label kohta1 = new Label ("Aloita uusi peli");  		// Luodaan uusi Label-olio, joka toimii uuden pelin aloituskohtana
-		kohta1.Position = new Vector (0, 40);  					// Asetetaan valikon ensimmäinen kohta hieman kentän keskikohdan yläpuolelle
-		valikonKohdat.Add (kohta1);  							// Lisätään luotu valikon kohta listaan jossa kohtia säilytetään
-
-		// Lisätään kaikki luodut kohdat peliin foreach-silmukalla
-		foreach (Label valikonKohta in valikonKohdat) 
-		{
-			Add (valikonKohta);
-		}
-	}
-
 	// HIIREN KUUNTELU ELI MITÄ TAPAHTUU KUN VASEN HIIRI ON PAINETTU POHJAAN
 	void KuunteleLiiketta(AnalogState hiirenTila)
 	{   
@@ -281,8 +279,6 @@ public class Kinkkuhefe : PhysicsGame
 				MessageDisplay.MaxMessageCount = 0;
 				k++;
 			}
-
-
 
 
 		}

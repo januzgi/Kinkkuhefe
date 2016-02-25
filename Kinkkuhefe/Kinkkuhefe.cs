@@ -8,7 +8,7 @@ using Jypeli.Widgets;
 public class Kinkkuhefe : PhysicsGame
 {
 	// TAUSTAKUVAT
-	Image taustakuvaEkaSiirtyma = LoadImage("aloituskuva"); 	// Ladataan keittiö taustaksi ensimmäiseen siirtymään päävalikon jälkeen.
+	Image taustakuvaalkuValikko = LoadImage("aloituskuva"); 	// Ladataan keittiöstä kuva alkuvalikon taustaksi.
 	Image keittokohtaus = LoadImage("keittokohtaus"); 			// Ladataan todellisen toiminnan aikainen näkymä.
 
 	// ALKUVALIKON KOHDAT LISTA
@@ -58,8 +58,8 @@ public class Kinkkuhefe : PhysicsGame
 		Add(alkuValikko);
 		alkuValikko.DefaultCancel = 3;							// Peruutusnäppäimellä pelistä pihalle eli ESC poistuu pelistä kuten "Syön mieluummin ananaspizzaa"
 		Level.Background.Image = keittokohtaus; 				// Sitten tämä kun aletaan kunnolla kokkaamaan!
+		alkuValikko.Color = Color.Transparent;					// Alkuvalikon tekstistä läpinäkyvä.
 
-		Level.Background.Image = taustakuvaEkaSiirtyma; 		// Ladataan keittiöstä lähempi kuva aloitusruudusta peliin siirtymäkohdan taustaksi.
 		IsFullScreen = true; 									// Peli asetetaan kokonäytölle.			
 		Level.CreateVerticalBorders ();							// Pelialueelle pystysuuntaiset reunat.
 
@@ -179,8 +179,7 @@ public class Kinkkuhefe : PhysicsGame
 		tilli.Tag = "aines";
 		Add (tilli);
 
-
-
+		/*
 		// OHJEKENTTÄ PELAAJALLE
 		Label tekstikentta = new Label(300, 50, "ALAHAN KOKATA POIKA!");
 		tekstikentta.X = Screen.Right - 250;
@@ -188,31 +187,32 @@ public class Kinkkuhefe : PhysicsGame
 		tekstikentta.TextColor = Color.DarkGray;
 		tekstikentta.BorderColor = Color.Black;
 		Add(tekstikentta);
+		*/
+
 
 		// HIIREN KÄYTTÖ
 		// OBJEKTIEN LIIKUTTELUUN & TUTKIMISEEN
 		Mouse.Listen (MouseButton.Left, ButtonState.Down, KuunteleLiiketta, "Lisää aineksia kinkkuun mausteeksi.");
-
-		//Mouse.Listen (MouseButton.Left, ButtonState.Down, KuunteleLiiketta2, "Lisää aineksia kinkkuun mausteeksi.");
-		//
 
 		// PELIN LOPETTAMINEN
 		PhoneBackButton.Listen (ConfirmExit, "Lopeta peli");
 		Keyboard.Listen (Key.Escape, ButtonState.Pressed, ConfirmExit, "Lopeta peli");
 	}
 
+	// LUODAAN ALKUVALIKKO 
 	void alkuValikko()
 	{
-		ClearAll (); // Tyhjennetään kenttä kaikista peliolioista
+		ClearAll (); 											// Tyhjennetään kenttä kaikista peliolioista
+		valikonKohdat = new List<Label> (); 					// Alustetaan lista, johon valikon kohdat tulevat
+		Level.Background.Image = taustakuvaalkuValikko; 		// Ladataan keittiöstä kuva pelin aloitusruuduksi
 
-		valikonKohdat = new List<Label> (); // Alustetaan lista, johon valikon kohdat tulevat
-
-		Label kohta1 = new Label ("Aloita uusi peli");  // Luodaan uusi Label-olio, joka toimii uuden pelin aloituskohtana
-		kohta1.Position = new Vector (0, 40);  // Asetetaan valikon ensimmäinen kohta hieman kentän keskikohdan yläpuolelle
-		valikonKohdat.Add (kohta1);  // Lisätään luotu valikon kohta listaan jossa kohtia säilytetään
+		Label kohta1 = new Label ("Aloita uusi peli");  		// Luodaan uusi Label-olio, joka toimii uuden pelin aloituskohtana
+		kohta1.Position = new Vector (0, 40);  					// Asetetaan valikon ensimmäinen kohta hieman kentän keskikohdan yläpuolelle
+		valikonKohdat.Add (kohta1);  							// Lisätään luotu valikon kohta listaan jossa kohtia säilytetään
 
 		// Lisätään kaikki luodut kohdat peliin foreach-silmukalla
-		foreach (Label valikonKohta in valikonKohdat) {
+		foreach (Label valikonKohta in valikonKohdat) 
+		{
 			Add (valikonKohta);
 		}
 	}
@@ -220,7 +220,15 @@ public class Kinkkuhefe : PhysicsGame
 	// HIIREN KUUNTELU ELI MITÄ TAPAHTUU KUN VASEN HIIRI ON PAINETTU POHJAAN
 	void KuunteleLiiketta(AnalogState hiirenTila)
 	{   
+		
 		int k = 1;
+		if (Mouse.IsCursorOn (Level.Background)) 
+		{
+			MessageDisplay.Add( "Ota ny jotain!" );
+			MessageDisplay.MaxMessageCount = 0;
+			k++;
+		}
+			
 		while(k == 1)
 		{
 			if (Mouse.IsCursorOn(elamansuola)) 
@@ -258,7 +266,7 @@ public class Kinkkuhefe : PhysicsGame
 				lanttu.X = Mouse.PositionOnWorld.X;
 				lanttu.Y = Mouse.PositionOnWorld.Y;
 
-				MessageDisplay.Add( "Vähä kyrsää... Brus suomalaista!" );
+				MessageDisplay.Add( "" );
 				MessageDisplay.MaxMessageCount = 0;
 				k++;
 			} 

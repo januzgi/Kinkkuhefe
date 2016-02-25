@@ -221,16 +221,17 @@ public class Kinkkuhefe : PhysicsGame
 	void KuunteleLiiketta(AnalogState hiirenTila)
 	{   
 		
+		MessageDisplay.Clear();
 		int k = 1;
-		if (Mouse.IsCursorOn (Level.Background)) 
-		{
-			MessageDisplay.Add( "Ota ny jotain!" );
-			MessageDisplay.MaxMessageCount = 0;
-			k++;
-		}
-			
 		while(k == 1)
 		{
+			if (Mouse.IsCursorOn (Level.Background)) 
+			{
+				MessageDisplay.Add( "Ota ny jotain!" );
+				MessageDisplay.MaxMessageCount = 0;
+				k++;
+			}
+
 			if (Mouse.IsCursorOn(elamansuola)) 
 			{
 				elamansuola.X = Mouse.PositionOnWorld.X;
@@ -266,7 +267,7 @@ public class Kinkkuhefe : PhysicsGame
 				lanttu.X = Mouse.PositionOnWorld.X;
 				lanttu.Y = Mouse.PositionOnWorld.Y;
 
-				MessageDisplay.Add( "" );
+				MessageDisplay.Add( "Meidän kunnioitettu puheenjohtaja." );
 				MessageDisplay.MaxMessageCount = 0;
 				k++;
 			} 

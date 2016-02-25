@@ -1,8 +1,8 @@
-﻿<Properties MonoDevelop.MonoMac.LastXamMacNagTime="25.2.2016 17:24:05">
+﻿<Properties MonoDevelop.MonoMac.LastXamMacNagTime="25.2.2016 17:24:05" StartupItem="Kinkkuhefe/Kinkkuhefe.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Kinkkuhefe/Kinkkuhefe.cs">
     <Files>
-      <File FileName="Kinkkuhefe/Kinkkuhefe.cs" Line="1" Column="1" />
+      <File FileName="Kinkkuhefe/Kinkkuhefe.cs" Line="55" Column="25" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

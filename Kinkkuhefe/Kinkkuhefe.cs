@@ -11,6 +11,8 @@ public class Kinkkuhefe : PhysicsGame
 	Image taustakuvaEkaSiirtyma = LoadImage("aloituskuva"); 	// Ladataan keittiö taustaksi ensimmäiseen siirtymään päävalikon jälkeen.
 	Image keittokohtaus = LoadImage("keittokohtaus"); 			// Ladataan todellisen toiminnan aikainen näkymä.
 
+	// ALKUVALIKON KOHDAT LISTA
+	List<Label> valikonKohdat;
 
 	// OBJEKTIT
 	PhysicsObject kinkku;
@@ -52,8 +54,12 @@ public class Kinkkuhefe : PhysicsGame
 	public override void Begin ()
 	{
 
+		MultiSelectWindow alkuValikko = new MultiSelectWindow("Oletko kova paistamaan kinkkua?", "OTETAAN!", "HALL OF KINKKUHEFE", "Syön mieluummin ananaspizzaa.");
+		Add(alkuValikko);
+		alkuValikko.DefaultCancel = 3;							// Peruutusnäppäimellä pelistä pihalle eli ESC poistuu pelistä kuten "Syön mieluummin ananaspizzaa"
+		Level.Background.Image = keittokohtaus; 				// Sitten tämä kun aletaan kunnolla kokkaamaan!
+
 		Level.Background.Image = taustakuvaEkaSiirtyma; 		// Ladataan keittiöstä lähempi kuva aloitusruudusta peliin siirtymäkohdan taustaksi.
-		// Level.Background.Image = keittokohtaus; 				// Sitten tämä kun aletaan kunnolla kokkaamaan!
 		IsFullScreen = true; 									// Peli asetetaan kokonäytölle.			
 		Level.CreateVerticalBorders ();							// Pelialueelle pystysuuntaiset reunat.
 
@@ -195,6 +201,22 @@ public class Kinkkuhefe : PhysicsGame
 		Keyboard.Listen (Key.Escape, ButtonState.Pressed, ConfirmExit, "Lopeta peli");
 	}
 
+	void alkuValikko()
+	{
+		ClearAll (); // Tyhjennetään kenttä kaikista peliolioista
+
+		valikonKohdat = new List<Label> (); // Alustetaan lista, johon valikon kohdat tulevat
+
+		Label kohta1 = new Label ("Aloita uusi peli");  // Luodaan uusi Label-olio, joka toimii uuden pelin aloituskohtana
+		kohta1.Position = new Vector (0, 40);  // Asetetaan valikon ensimmäinen kohta hieman kentän keskikohdan yläpuolelle
+		valikonKohdat.Add (kohta1);  // Lisätään luotu valikon kohta listaan jossa kohtia säilytetään
+
+		// Lisätään kaikki luodut kohdat peliin foreach-silmukalla
+		foreach (Label valikonKohta in valikonKohdat) {
+			Add (valikonKohta);
+		}
+	}
+
 	// HIIREN KUUNTELU ELI MITÄ TAPAHTUU KUN VASEN HIIRI ON PAINETTU POHJAAN
 	void KuunteleLiiketta(AnalogState hiirenTila)
 	{   
@@ -203,23 +225,57 @@ public class Kinkkuhefe : PhysicsGame
 		{
 			if (Mouse.IsCursorOn(elamansuola)) 
 			{
-			elamansuola.X = Mouse.PositionOnWorld.X;
-			elamansuola.Y = Mouse.PositionOnWorld.Y;
+				elamansuola.X = Mouse.PositionOnWorld.X;
+				elamansuola.Y = Mouse.PositionOnWorld.Y;
 
-			MessageDisplay.Add( "Käytä ensi kerralla Himalajan suolaa" );
-			MessageDisplay.MaxMessageCount = 0;
-			k++;
+				MessageDisplay.Add( "Käytä ensi kerralla Himalajan suolaa" );
+				MessageDisplay.MaxMessageCount = 0;
+				k++;
 			}
-
-			else if (Mouse.IsCursorOn(elamansuola)) 
+				
+			else if (Mouse.IsCursorOn(hksininen)) 
 			{
-			elamansuola.X = Mouse.PositionOnWorld.X;
-			elamansuola.Y = Mouse.PositionOnWorld.Y;
+				hksininen.X = Mouse.PositionOnWorld.X;
+				hksininen.Y = Mouse.PositionOnWorld.Y;
 
-			MessageDisplay.Add( "Tästä tulee hyvvöö!" );
-			MessageDisplay.MaxMessageCount = 0;
-			k++;
+				MessageDisplay.Add( "Vähä kyrsää... Brus suomalaista!" );
+				MessageDisplay.MaxMessageCount = 0;
+				k++;
 			}
+
+			else if (Mouse.IsCursorOn(jackdaniels)) 
+			{
+				jackdaniels.X = Mouse.PositionOnWorld.X;
+				jackdaniels.Y = Mouse.PositionOnWorld.Y;
+
+				MessageDisplay.Add( "Sullahan on ihan kehittynyt maku." );
+				MessageDisplay.MaxMessageCount = 0;
+				k++;
+			}
+
+			else if (Mouse.IsCursorOn(lanttu)) 
+			{
+				lanttu.X = Mouse.PositionOnWorld.X;
+				lanttu.Y = Mouse.PositionOnWorld.Y;
+
+				MessageDisplay.Add( "Vähä kyrsää... Brus suomalaista!" );
+				MessageDisplay.MaxMessageCount = 0;
+				k++;
+			} 
+
+			else if (Mouse.IsCursorOn(kossu)) 
+			{
+				kossu.X = Mouse.PositionOnWorld.X;
+				kossu.Y = Mouse.PositionOnWorld.Y;
+
+				MessageDisplay.Add( "Vähä kyrsää... Brus suomalaista!" );
+				MessageDisplay.MaxMessageCount = 0;
+				k++;
+			}
+
+
+
+
 		}
 	}
 

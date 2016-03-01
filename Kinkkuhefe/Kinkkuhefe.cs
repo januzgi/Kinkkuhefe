@@ -74,7 +74,8 @@ public class Kinkkuhefe : PhysicsGame
 	// AINEKSEN LISÄÄMINEN KINKKUUN
 	void OnkoKinkunPaalla(AnalogState hiirentila)
 	{
-		if (Mouse.IsCursorOn (kinkku) || elamansuola.X == kinkku.X) {
+		if (Mouse.IsCursorOn (kinkku) || elamansuola.X == kinkku.X) 
+		{
 			MultiSelectWindow suolaValikko = new MultiSelectWindow ("paljonko laitetaan?", "kolme kuppii", "4 tonnii", "10 metrii"); 
 			MessageDisplay.Clear ();
 			suolaValikko.DefaultCancel = 3;
@@ -248,6 +249,7 @@ public class Kinkkuhefe : PhysicsGame
 		// HIIREN KÄYTTÖ OBJEKTIEN LIIKUTTELUUN & TUTKIMISEEN
 		Mouse.Listen (MouseButton.Left, ButtonState.Pressed, KuunteleLiiketta2, "Jos ei koordinaatio riitä ;D");
 		Mouse.Listen (MouseButton.Left, ButtonState.Down, KuunteleLiiketta, "Lisää aineksia kinkkuun mausteeksi.");
+		Mouse.Listen (MouseButton.Left, ButtonState.Released, OnkoKinkunPaalla, "Lisää aineen kinkkuun jos se on kohdalla.");
 
 
 		// PELIN LOPETTAMINEN
@@ -259,10 +261,9 @@ public class Kinkkuhefe : PhysicsGame
 	// HIIREN KUUNTELU ELI MITÄ TAPAHTUU KUN VASEMMALLA HIIRELLÄ VAAN KLIKATAAN
 	void KuunteleLiiketta2()
 	{
-			MessageDisplay.Clear();							// Tyhjennetään tekstiruutu edellisestä viisastelusta.
-
 			MessageDisplay.Add ("TARTU KUIN MIES!");
 			MessageDisplay.MaxMessageCount = 0;
+			MessageDisplay.MessageTime = new TimeSpan(0, 0, 3);
 	}
 
 
@@ -273,8 +274,7 @@ public class Kinkkuhefe : PhysicsGame
 
 			if (Mouse.IsCursorOn(elamansuola)) 
 			{
-				elamansuola.X = Mouse.PositionOnWorld.X;
-				elamansuola.Y = Mouse.PositionOnWorld.Y;
+				elamansuola.Position = Mouse.PositionOnWorld;
 
 				MessageDisplay.Add( "Käytä ensi kerralla Himalajan suolaa" );
 				MessageDisplay.MaxMessageCount = 0;
@@ -282,8 +282,7 @@ public class Kinkkuhefe : PhysicsGame
 				
 			else if (Mouse.IsCursorOn(hksininen)) 
 			{
-				hksininen.X = Mouse.PositionOnWorld.X;
-				hksininen.Y = Mouse.PositionOnWorld.Y;
+				hksininen.Position = Mouse.PositionOnWorld;
 
 				MessageDisplay.Add( "Vähä kyrsää... Brus suomalaista!" );
 				MessageDisplay.MaxMessageCount = 0;
@@ -291,8 +290,7 @@ public class Kinkkuhefe : PhysicsGame
 
 			else if (Mouse.IsCursorOn(jackdaniels)) 
 			{
-				jackdaniels.X = Mouse.PositionOnWorld.X;
-				jackdaniels.Y = Mouse.PositionOnWorld.Y;
+				jackdaniels.Position = Mouse.PositionOnWorld;
 
 				MessageDisplay.Add( "Sullahan on ihan kehittynyt maku." );
 				MessageDisplay.MaxMessageCount = 0;
@@ -300,8 +298,7 @@ public class Kinkkuhefe : PhysicsGame
 
 			else if (Mouse.IsCursorOn(lanttu)) 
 			{
-				lanttu.X = Mouse.PositionOnWorld.X;
-				lanttu.Y = Mouse.PositionOnWorld.Y;
+				lanttu.Position = Mouse.PositionOnWorld;
 
 				MessageDisplay.Add( "Meidän kunnioitettu puheenjohtaja." );
 				MessageDisplay.MaxMessageCount = 0;
@@ -309,12 +306,84 @@ public class Kinkkuhefe : PhysicsGame
 
 			else if (Mouse.IsCursorOn(kossu)) 
 			{
-				kossu.X = Mouse.PositionOnWorld.X;
-				kossu.Y = Mouse.PositionOnWorld.Y;
+				kossu.Position = Mouse.PositionOnWorld;
 
 				MessageDisplay.Add( "Vähä kyrsää... Brus suomalaista!" );
 				MessageDisplay.MaxMessageCount = 0;
 			}
+
+			else if (Mouse.IsCursorOn(mandariini)) 
+			{
+				mandariini.Position = Mouse.PositionOnWorld;
+
+				MessageDisplay.Add( "Vähä kyrsää... Brus suomalaista!" );
+				MessageDisplay.MaxMessageCount = 0;
+			}
+
+			else if (Mouse.IsCursorOn(marsipaani)) 
+			{
+				marsipaani.Position = Mouse.PositionOnWorld;
+
+				MessageDisplay.Add( "Vähä kyrsää... Brus suomalaista!" );
+				MessageDisplay.MaxMessageCount = 0;
+			}
+
+			else if (Mouse.IsCursorOn(rakuuna)) 
+			{
+				rakuuna.Position = Mouse.PositionOnWorld;
+
+				MessageDisplay.Add( "Vähä kyrsää... Brus suomalaista!" );
+				MessageDisplay.MaxMessageCount = 0;
+			}
+
+			else if (Mouse.IsCursorOn(msmjauhe)) 
+			{
+				msmjauhe.Position = Mouse.PositionOnWorld;
+
+				MessageDisplay.Add( "Vähä kyrsää... Brus suomalaista!" );
+				MessageDisplay.MaxMessageCount = 0;
+			}
+
+			else if (Mouse.IsCursorOn(mustaherukka)) 
+			{
+				mustaherukka.Position = Mouse.PositionOnWorld;
+
+				MessageDisplay.Add( "Vähä kyrsää... Brus suomalaista!" );
+				MessageDisplay.MaxMessageCount = 0;
+			}
+
+			else if (Mouse.IsCursorOn(mustakitaturska)) 
+			{
+				mustakitaturska.Position = Mouse.PositionOnWorld;
+
+				MessageDisplay.Add( "Vähä kyrsää... Brus suomalaista!" );
+				MessageDisplay.MaxMessageCount = 0;
+			}
+
+			else if (Mouse.IsCursorOn(mustapippuri)) 
+			{
+				mustapippuri.Position = Mouse.PositionOnWorld;
+
+				MessageDisplay.Add( "Vähä kyrsää... Brus suomalaista!" );
+				MessageDisplay.MaxMessageCount = 0;
+			}
+
+			else if (Mouse.IsCursorOn(sukkahousut)) 
+			{
+				sukkahousut.Position = Mouse.PositionOnWorld;
+
+				MessageDisplay.Add( "Vähä kyrsää... Brus suomalaista!" );
+				MessageDisplay.MaxMessageCount = 0;
+			}
+
+			else if (Mouse.IsCursorOn(tilli)) 
+			{
+				tilli.Position = Mouse.PositionOnWorld;
+
+				MessageDisplay.Add( "Vähä kyrsää... Brus suomalaista!" );
+				MessageDisplay.MaxMessageCount = 0;
+			}
+
 	}
 
 

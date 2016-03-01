@@ -71,6 +71,41 @@ public class Kinkkuhefe : PhysicsGame
 	}
 
 
+	// AINEKSEN LISÄÄMINEN KINKKUUN
+	void OnkoKinkunPaalla(AnalogState hiirentila)
+	{
+		if (Mouse.IsCursorOn (kinkku) || elamansuola.X == kinkku.X) {
+			MultiSelectWindow suolaValikko = new MultiSelectWindow ("paljonko laitetaan?", "kolme kuppii", "4 tonnii", "10 metrii"); 
+			MessageDisplay.Clear ();
+			suolaValikko.DefaultCancel = 3;
+
+			Add(suolaValikko);
+			int i = suolaValikko.SelectedIndex;
+			//suolaValikko.AddItemHandler (0, KommenttiAineista(i));
+			KommenttiAineista(i);
+			elamansuola.Destroy();
+		}
+	}
+
+
+	// 
+	void KommenttiAineista(int i)
+	{
+		if (i.Equals (1)) 
+		{
+			MessageDisplay.Add ("nössösti suolaa");
+			MessageDisplay.MaxMessageCount = 1;
+		} 
+
+		else if (i == 2) 
+		{
+			MessageDisplay.Add( "Voi veljet" );
+			MessageDisplay.MaxMessageCount = 1;
+		}
+
+	}
+
+
 	// PÄÄOHJELMA
 	public override void Begin ()
 	{

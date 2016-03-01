@@ -14,6 +14,9 @@ public class Kinkkuhefe : PhysicsGame
 	// ALKUVALIKON KOHDAT LISTA
 	List<Label> valikonKohdat;
 
+	// LUODAAN LISTA OBJEKTEILLE
+	List<PhysicsObject> ainekset = new List<PhysicsObject>();
+
 	// OBJEKTIT
 	PhysicsObject kinkku;			// 1.
 	PhysicsObject elamansuola;		// 2.
@@ -52,6 +55,155 @@ public class Kinkkuhefe : PhysicsGame
 	*/
 
 
+	// PÄÄOHJELMA
+	public override void Begin ()
+	{
+		SetWindowSize(1920, 1080);	
+		MultiSelectWindow alkuValikko = new MultiSelectWindow("Oletko kova paistamaan kinkkua?", "OTETAAN!", "HALL OF KINKKUHEFE", "Syön mieluummin ananaspizzaa.");
+		alkuValikko.DefaultCancel = 3;							// Peruutusnäppäimellä pelistä pihalle eli ESC poistuu pelistä kuten "Syön mieluummin ananaspizzaa"
+		Level.Background.Image = pelinTausta; 					// Sitten tämä kun aletaan kunnolla kokkaamaan!
+		IsFullScreen = true; 									// Peli asetetaan kokonäytölle.			
+		Mouse.IsCursorVisible = true; 							// Hiiri näkyviin.
+
+		Add(alkuValikko);
+								
+
+		// MAUSTEET / AINEKSET OBJEKTEIKSI
+		// THÖ KINKKU
+		kinkku = PhysicsObject.CreateStaticObject(Level.Width * 0.25, Level.Height * 0.2);
+		kinkku.Image = LoadImage("kinkku");							// 1. Lisätään kinkku
+		kinkku.X = -250;
+		kinkku.Y = -20;
+		Add (kinkku, 0);
+
+		elamansuola = new PhysicsObject (Level.Width * 0.05, Level.Height * 0.1);
+		elamansuola.Image = LoadImage("elamansuola"); 				// 2. Lisätään suolapurkki
+		elamansuola.X = 100;
+		elamansuola.Y = 100;
+		elamansuola.Tag = "elamansuola";
+		Add (elamansuola, 1);
+
+		hksininen = new PhysicsObject (Level.Width * 0.15, Level.Height * 0.075);
+		hksininen.Image = LoadImage("hksininen"); 					// 3. Lisätään HK:n sininen eli makkara
+		hksininen.X = 150;
+		hksininen.Y = -100;
+		hksininen.Tag = "aines";
+		Add (hksininen, 1);
+
+		jackdaniels = new PhysicsObject (Level.Width * 0.075, Level.Height * 0.25);
+		jackdaniels.Image = LoadImage("jackdaniels"); 				// 4. Lisätään Jack Daniels viskipullo
+		jackdaniels.X = 200;
+		jackdaniels.Y = -100;
+		jackdaniels.Tag = "aines";
+		Add (jackdaniels, 1);
+
+		kebabkastike = new PhysicsObject (Level.Width * 0.15, Level.Height * 0.15);
+		kebabkastike.Image = LoadImage("kebabkastike"); 			// 5. Lisätään kebabkastikepurkit 
+		kebabkastike.X = 300;
+		kebabkastike.Y = -100;
+		kebabkastike.Tag = "aines";
+		Add (kebabkastike, 1);
+
+		lanttu = new PhysicsObject (Level.Width * 0.1, Level.Height * 0.1);
+		lanttu.Image = LoadImage("lanttu"); 						// 6. Lisätään kolmen lanttua
+		lanttu.X = 400;
+		lanttu.Y = -100;
+		lanttu.Tag = "aines";
+		Add (lanttu, 1);
+
+		kossu = new PhysicsObject (Level.Width * 0.075, Level.Height * 0.25);
+		kossu.Image = LoadImage("kossu"); 							// 7. Lisätään Koskenkorva viinapullo
+		kossu.X = 500;
+		kossu.Y = 100;
+		kossu.Tag = "aines";
+		Add (kossu, 1);
+
+		mandariini = new PhysicsObject (Level.Width * 0.1, Level.Height * 0.1);
+		mandariini.Image = LoadImage("mandariini"); 				// 8. Lisätään mandariini
+		mandariini.X = 600;
+		mandariini.Y = -100;
+		mandariini.Tag = "aines";
+		Add (mandariini, 1);
+
+		marsipaani = new PhysicsObject (Level.Width * 0.1, Level.Height * 0.15);
+		marsipaani.Image = LoadImage("marsipaani"); 				// 9. Lisätään marsipaani
+		marsipaani.X = 700;
+		marsipaani.Y = 100;
+		marsipaani.Tag = "aines";
+		Add (marsipaani, 1);
+
+		rakuuna = new PhysicsObject (Level.Width * 0.025, Level.Height * 0.07);
+		rakuuna.Image = LoadImage("rakuuna");						// 10. Lisätään rakuuna maustepurkki
+		rakuuna.X = -100;
+		rakuuna.Y = -100;
+		rakuuna.Tag = "aines";
+		Add (rakuuna, 1);
+
+		msmjauhe = new PhysicsObject (Level.Width * 0.05, Level.Height * 0.05);
+		msmjauhe.Image = LoadImage("msmjauhe"); 					// 11. Lisätään MSM -jauhe kippo 
+		msmjauhe.X = -200;
+		msmjauhe.Y = 100;
+		msmjauhe.Tag = "aines";
+		Add (msmjauhe, 1);
+
+		mustaherukka = new PhysicsObject (Level.Width * 0.1, Level.Height * 0.1);
+		mustaherukka.Image = LoadImage("mustaherukka"); 			// 12. Lisätään mustaherukat 
+		mustaherukka.X = -300;
+		mustaherukka.Y = -100;
+		mustaherukka.Tag = "aines";
+		Add (mustaherukka, 1);
+
+		mustakitaturska = new PhysicsObject (Level.Width * 0.25, Level.Height * 0.1);
+		mustakitaturska.Image = LoadImage("mustakitaturska"); 		// 13. Lisätään mustakitaturskan
+		mustakitaturska.X = -400;
+		mustakitaturska.Y = 100;
+		mustakitaturska.Tag = "aines";
+		Add (mustakitaturska, 1);
+
+		mustapippuri = new PhysicsObject (Level.Width * 0.1, Level.Height * 0.1);
+		mustapippuri.Image = LoadImage("mustapippuri"); 			// 14. Lisätään mustapippurit
+		mustapippuri.X = -500;
+		mustapippuri.Y = -100;
+		mustapippuri.Tag = "aines";
+		Add (mustapippuri, 1);
+
+		sukkahousut = new PhysicsObject (Level.Width * 0.15, Level.Height * 0.25);
+		sukkahousut.Image = LoadImage("sukkahousut"); 				// 15. Lisätään sukkahousut
+		sukkahousut.X = -600;
+		sukkahousut.Y = 100;
+		sukkahousut.Tag = "aines";
+		Add (sukkahousut, 1);
+
+		tilli = new PhysicsObject (Level.Width * 0.2, Level.Height * 0.2);
+		tilli.Image = LoadImage("tilli"); 							// 16. Lisätään tilli
+		tilli.X = -600;
+		tilli.Y = -100;
+		tilli.Tag = "aines";
+		Add (tilli, 1);
+
+		/*
+		// OHJEKENTTÄ PELAAJALLE
+		Label tekstikentta = new Label(300, 50, "ALAHAN KOKATA POIKA!");
+		tekstikentta.X = Screen.Right - 250;
+		tekstikentta.Y = Screen.Top - 50;
+		tekstikentta.TextColor = Color.DarkGray;
+		tekstikentta.BorderColor = Color.Black;
+		Add(tekstikentta);
+		*/
+
+
+		// HIIREN KÄYTTÖ OBJEKTIEN LIIKUTTELUUN & TUTKIMISEEN
+		Mouse.Listen (MouseButton.Left, ButtonState.Pressed, KuunteleLiiketta2, "Jos ei koordinaatio riitä ;D");
+		Mouse.Listen (MouseButton.Left, ButtonState.Down, KuunteleLiiketta, "Lisää aineksia kinkkuun mausteeksi.");
+		//Mouse.Listen (MouseButton.Left, ButtonState.Released, OnkoKinkunPaalla, "Lisää aineen kinkkuun jos se on kohdalla.");
+
+
+		// PELIN LOPETTAMINEN
+		PhoneBackButton.Listen (ConfirmExit, "Lopeta peli");
+		Keyboard.Listen (Key.Escape, ButtonState.Pressed, ConfirmExit, "Lopeta peli");
+	}
+
+
 	// LUODAAN ALKUVALIKKO 
 	void alkuValikko()
 	{
@@ -70,26 +222,25 @@ public class Kinkkuhefe : PhysicsGame
 		}
 	}
 
-
+	/*
 	// AINEKSEN LISÄÄMINEN KINKKUUN
-	void OnkoKinkunPaalla(AnalogState hiirentila)
+	void OnkoKinkunPaalla()
 	{
-		if (Mouse.IsCursorOn (kinkku) || elamansuola.X == kinkku.X) 
+		if (Mouse.IsCursorOn (kinkku) || aines.Position == kinkku.Position) 
 		{
-			MultiSelectWindow suolaValikko = new MultiSelectWindow ("paljonko laitetaan?", "kolme kuppii", "4 tonnii", "10 metrii"); 
+			MultiSelectWindow ainesValikko = new MultiSelectWindow ("Kuinka paljon?", "Kolme kuppii", "4 tonnii", "10 metrii"); 
 			MessageDisplay.Clear ();
-			suolaValikko.DefaultCancel = 3;
 
-			Add(suolaValikko);
-			int i = suolaValikko.SelectedIndex;
-			//suolaValikko.AddItemHandler (0, KommenttiAineista(i));
+			Add(ainesValikko);
+			int i = ainesValikko.SelectedIndex;
+			ainesValikko.DefaultCancel = 3;
 			KommenttiAineista(i);
-			elamansuola.Destroy();
+			aines.Destroy();
 		}
 	}
 
 
-	// 
+	// KOMMENTOI LISÄTTYÄ AINETTA
 	void KommenttiAineista(int i)
 	{
 		if (i.Equals (1)) 
@@ -103,167 +254,14 @@ public class Kinkkuhefe : PhysicsGame
 			MessageDisplay.Add( "Voi veljet" );
 			MessageDisplay.MaxMessageCount = 1;
 		}
-
 	}
-
-
-	// PÄÄOHJELMA
-	public override void Begin ()
-	{
-		SetWindowSize(1920, 1080);	
-		MultiSelectWindow alkuValikko = new MultiSelectWindow("Oletko kova paistamaan kinkkua?", "OTETAAN!", "HALL OF KINKKUHEFE", "Syön mieluummin ananaspizzaa.");
-		alkuValikko.DefaultCancel = 3;							// Peruutusnäppäimellä pelistä pihalle eli ESC poistuu pelistä kuten "Syön mieluummin ananaspizzaa"
-		Level.Background.Image = pelinTausta; 					// Sitten tämä kun aletaan kunnolla kokkaamaan!
-		IsFullScreen = true; 									// Peli asetetaan kokonäytölle.			
-		Mouse.IsCursorVisible = true; 							// Hiiri näkyviin.
-
-		Add(alkuValikko);
-								
-		//Keyboard.Listen (Key.F1, ButtonState.Pressed, ShowControlHelp, "Vinkkejä");
-
-		// MAUSTEET / AINEKSET OBJEKTEIKSI
-		// THÖ KINKKU
-		kinkku = PhysicsObject.CreateStaticObject(Level.Width * 0.3, Level.Height * 0.2);
-		kinkku.Image = LoadImage("kinkku");							// 1. Lisätään kinkku
-		kinkku.X = -250;
-		kinkku.Y = -20;
-		Add (kinkku, 0);
-
-		elamansuola = new PhysicsObject (Level.Width * 0.05, Level.Height * 0.1);
-		elamansuola.Image = LoadImage("elamansuola"); 				// 2. Lisätään suolapurkki
-		elamansuola.X = 100;
-		elamansuola.Y = 100;
-		elamansuola.Tag = "aines";
-		Add (elamansuola, 1);
-
-		hksininen = new PhysicsObject (Level.Width * 0.3, Level.Height * 0.1);
-		hksininen.Image = LoadImage("hksininen"); 					// 3. Lisätään HK:n sininen eli makkara
-		hksininen.X = 150;
-		hksininen.Y = 100;
-		hksininen.Tag = "aines";
-		Add (hksininen, 1);
-
-
-		jackdaniels = new PhysicsObject (Level.Width * 0.1, Level.Height * 0.3);
-		jackdaniels.Image = LoadImage("jackdaniels"); 				// 4. Lisätään Jack Daniels viskipullo
-		jackdaniels.X = 200;
-		jackdaniels.Y = 100;
-		jackdaniels.Tag = "aines";
-		Add (jackdaniels, 1);
-
-		kebabkastike = new PhysicsObject (Level.Width * 0.1, Level.Height * 0.3);
-		kebabkastike.Image = LoadImage("kebabkastike"); 			// 5. Lisätään kebabkastikepurkit 
-		kebabkastike.X = 300;
-		kebabkastike.Y = 100;
-		kebabkastike.Tag = "aines";
-		Add (kebabkastike, 1);
-
-		lanttu = new PhysicsObject (Level.Width * 0.2, Level.Height * 0.2);
-		lanttu.Image = LoadImage("lanttu"); 						// 6. Lisätään kolmen lanttua
-		lanttu.X = 400;
-		lanttu.Y = 100;
-		lanttu.Tag = "aines";
-		Add (lanttu, 1);
-
-		kossu = new PhysicsObject (Level.Width * 0.1, Level.Height * 0.3);
-		kossu.Image = LoadImage("kossu"); 							// 7. Lisätään Koskenkorva viinapullo
-		kossu.X = 500;
-		kossu.Y = 100;
-		kossu.Tag = "aines";
-		Add (kossu, 1);
-
-		mandariini = new PhysicsObject (Level.Width * 0.2, Level.Height * 0.2);
-		mandariini.Image = LoadImage("mandariini"); 				// 8. Lisätään mandariini
-		mandariini.X = 600;
-		mandariini.Y = 100;
-		mandariini.Tag = "aines";
-		Add (mandariini, 1);
-
-		marsipaani = new PhysicsObject (Level.Width * 0.4, Level.Height * 0.2);
-		marsipaani.Image = LoadImage("marsipaani"); 				// 9. Lisätään marsipaani
-		marsipaani.X = 700;
-		marsipaani.Y = 100;
-		marsipaani.Tag = "aines";
-		Add (marsipaani, 1);
-
-		rakuuna = new PhysicsObject (Level.Width * 0.2, Level.Height * 0.2);
-		rakuuna.Image = LoadImage("rakuuna");						// 10. Lisätään rakuuna maustepurkki
-		rakuuna.X = -100;
-		rakuuna.Y = 100;
-		rakuuna.Tag = "aines";
-		Add (rakuuna, 1);
-
-		msmjauhe = new PhysicsObject (Level.Width * 0.2, Level.Height * 0.2);
-		msmjauhe.Image = LoadImage("msmjauhe"); 					// 11. Lisätään MSM -jauhe kippo 
-		msmjauhe.X = -200;
-		msmjauhe.Y = 100;
-		msmjauhe.Tag = "aines";
-		Add (msmjauhe, 1);
-
-		mustaherukka = new PhysicsObject (Level.Width * 0.2, Level.Height * 0.2);
-		mustaherukka.Image = LoadImage("mustaherukka"); 			// 12. Lisätään mustaherukat 
-		mustaherukka.X = -300;
-		mustaherukka.Y = 100;
-		mustaherukka.Tag = "aines";
-		Add (mustaherukka, 1);
-
-		mustakitaturska = new PhysicsObject (Level.Width * 0.2, Level.Height * 0.2);
-		mustakitaturska.Image = LoadImage("mustakitaturska"); 		// 13. Lisätään mustakitaturskan
-		mustakitaturska.X = -400;
-		mustakitaturska.Y = 100;
-		mustakitaturska.Tag = "aines";
-		Add (mustakitaturska, 1);
-
-		mustapippuri = new PhysicsObject (Level.Width * 0.2, Level.Height * 0.2);
-		mustapippuri.Image = LoadImage("mustapippuri"); 			// 14. Lisätään mustapippurit
-		mustapippuri.X = -500;
-		mustapippuri.Y = 100;
-		mustapippuri.Tag = "aines";
-		Add (mustapippuri, 1);
-
-		sukkahousut = new PhysicsObject (Level.Width * 0.2, Level.Height * 0.2);
-		sukkahousut.Image = LoadImage("sukkahousut"); 				// 15. Lisätään sukkahousut
-		sukkahousut.X = -600;
-		sukkahousut.Y = 100;
-		sukkahousut.Tag = "aines";
-		Add (sukkahousut, 1);
-
-		tilli = new PhysicsObject (Level.Width * 0.2, Level.Height * 0.2);
-		tilli.Image = LoadImage("tilli"); 							// 16. Lisätään tilli
-		tilli.X = -700;
-		tilli.Y = 100;
-		tilli.Tag = "aines";
-		Add (tilli, 1);
-
-		/*
-		// OHJEKENTTÄ PELAAJALLE
-		Label tekstikentta = new Label(300, 50, "ALAHAN KOKATA POIKA!");
-		tekstikentta.X = Screen.Right - 250;
-		tekstikentta.Y = Screen.Top - 50;
-		tekstikentta.TextColor = Color.DarkGray;
-		tekstikentta.BorderColor = Color.Black;
-		Add(tekstikentta);
-		*/
-
-
-		// HIIREN KÄYTTÖ OBJEKTIEN LIIKUTTELUUN & TUTKIMISEEN
-		Mouse.Listen (MouseButton.Left, ButtonState.Pressed, KuunteleLiiketta2, "Jos ei koordinaatio riitä ;D");
-		Mouse.Listen (MouseButton.Left, ButtonState.Down, KuunteleLiiketta, "Lisää aineksia kinkkuun mausteeksi.");
-		Mouse.Listen (MouseButton.Left, ButtonState.Released, OnkoKinkunPaalla, "Lisää aineen kinkkuun jos se on kohdalla.");
-
-
-		// PELIN LOPETTAMINEN
-		PhoneBackButton.Listen (ConfirmExit, "Lopeta peli");
-		Keyboard.Listen (Key.Escape, ButtonState.Pressed, ConfirmExit, "Lopeta peli");
-	}
-
+	*/
 
 	// HIIREN KUUNTELU ELI MITÄ TAPAHTUU KUN VASEMMALLA HIIRELLÄ VAAN KLIKATAAN
 	void KuunteleLiiketta2()
 	{
 			MessageDisplay.Add ("TARTU KUIN MIES!");
 			MessageDisplay.MaxMessageCount = 0;
-			MessageDisplay.MessageTime = new TimeSpan(0, 0, 3);
 	}
 
 
@@ -284,7 +282,7 @@ public class Kinkkuhefe : PhysicsGame
 			{
 				hksininen.Position = Mouse.PositionOnWorld;
 
-				MessageDisplay.Add( "Vähä kyrsää... Brus suomalaista!" );
+				MessageDisplay.Add( "Vähä kyrsää... Perus suomalaista!" );
 				MessageDisplay.MaxMessageCount = 0;
 			}
 
@@ -295,6 +293,15 @@ public class Kinkkuhefe : PhysicsGame
 				MessageDisplay.Add( "Sullahan on ihan kehittynyt maku." );
 				MessageDisplay.MaxMessageCount = 0;
 			}
+
+
+			else if (Mouse.IsCursorOn(kebabkastike)) 
+			{
+				kebabkastike.Position = Mouse.PositionOnWorld;
+
+				MessageDisplay.Add( "Oi että tää ei koskaan jätä kylmäks." );
+				MessageDisplay.MaxMessageCount = 0;
+			} 
 
 			else if (Mouse.IsCursorOn(lanttu)) 
 			{
@@ -308,7 +315,7 @@ public class Kinkkuhefe : PhysicsGame
 			{
 				kossu.Position = Mouse.PositionOnWorld;
 
-				MessageDisplay.Add( "Vähä kyrsää... Brus suomalaista!" );
+				MessageDisplay.Add( "RAI RAI!" );
 				MessageDisplay.MaxMessageCount = 0;
 			}
 
@@ -316,7 +323,7 @@ public class Kinkkuhefe : PhysicsGame
 			{
 				mandariini.Position = Mouse.PositionOnWorld;
 
-				MessageDisplay.Add( "Vähä kyrsää... Brus suomalaista!" );
+				MessageDisplay.Add( "Ootsää mies vai hanhi?" );
 				MessageDisplay.MaxMessageCount = 0;
 			}
 
@@ -324,7 +331,7 @@ public class Kinkkuhefe : PhysicsGame
 			{
 				marsipaani.Position = Mouse.PositionOnWorld;
 
-				MessageDisplay.Add( "Vähä kyrsää... Brus suomalaista!" );
+				MessageDisplay.Add( "Herkkuperse!" );
 				MessageDisplay.MaxMessageCount = 0;
 			}
 
@@ -332,7 +339,7 @@ public class Kinkkuhefe : PhysicsGame
 			{
 				rakuuna.Position = Mouse.PositionOnWorld;
 
-				MessageDisplay.Add( "Vähä kyrsää... Brus suomalaista!" );
+				MessageDisplay.Add( "Ei susta kyllä kokkia tule." );
 				MessageDisplay.MaxMessageCount = 0;
 			}
 
@@ -340,7 +347,7 @@ public class Kinkkuhefe : PhysicsGame
 			{
 				msmjauhe.Position = Mouse.PositionOnWorld;
 
-				MessageDisplay.Add( "Vähä kyrsää... Brus suomalaista!" );
+				MessageDisplay.Add( "Et taida tietää mitä tää on..." );
 				MessageDisplay.MaxMessageCount = 0;
 			}
 
@@ -348,7 +355,7 @@ public class Kinkkuhefe : PhysicsGame
 			{
 				mustaherukka.Position = Mouse.PositionOnWorld;
 
-				MessageDisplay.Add( "Vähä kyrsää... Brus suomalaista!" );
+				MessageDisplay.Add( "Rohkee veto, sekaan vaan!" );
 				MessageDisplay.MaxMessageCount = 0;
 			}
 
@@ -356,7 +363,7 @@ public class Kinkkuhefe : PhysicsGame
 			{
 				mustakitaturska.Position = Mouse.PositionOnWorld;
 
-				MessageDisplay.Add( "Vähä kyrsää... Brus suomalaista!" );
+				MessageDisplay.Add( "Kalaa maailman pimeimmistä vesistä." );
 				MessageDisplay.MaxMessageCount = 0;
 			}
 
@@ -364,7 +371,7 @@ public class Kinkkuhefe : PhysicsGame
 			{
 				mustapippuri.Position = Mouse.PositionOnWorld;
 
-				MessageDisplay.Add( "Vähä kyrsää... Brus suomalaista!" );
+				MessageDisplay.Add( "Turvallisin vaihtoehto... Vässykkä." );
 				MessageDisplay.MaxMessageCount = 0;
 			}
 
@@ -372,7 +379,7 @@ public class Kinkkuhefe : PhysicsGame
 			{
 				sukkahousut.Position = Mouse.PositionOnWorld;
 
-				MessageDisplay.Add( "Vähä kyrsää... Brus suomalaista!" );
+				MessageDisplay.Add( "Kannattaa kääriä kinkku tähän ettei kuivu." );
 				MessageDisplay.MaxMessageCount = 0;
 			}
 
@@ -380,7 +387,7 @@ public class Kinkkuhefe : PhysicsGame
 			{
 				tilli.Position = Mouse.PositionOnWorld;
 
-				MessageDisplay.Add( "Vähä kyrsää... Brus suomalaista!" );
+				MessageDisplay.Add( "Vaimo taas laittanu tillilihaa..." );
 				MessageDisplay.MaxMessageCount = 0;
 			}
 

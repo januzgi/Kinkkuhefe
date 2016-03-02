@@ -2,16 +2,12 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Kinkkuhefe/Kinkkuhefe.cs">
     <Files>
-      <File FileName="Kinkkuhefe/Kinkkuhefe.cs" Line="79" Column="6" />
+      <File FileName="Kinkkuhefe/Kinkkuhefe.cs" Line="99" Column="45" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="Kinkkuhefe" expanded="True">
-            <Node name="Kinkkuhefe" expanded="True">
-              <Node name="Kinkkuhefe.cs" selected="True" />
-            </Node>
-          </Node>
+          <Node />
         </State>
       </Pad>
     </Pads>

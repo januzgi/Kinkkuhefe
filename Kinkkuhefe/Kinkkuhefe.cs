@@ -79,35 +79,41 @@ public class Kinkkuhefe : PhysicsGame
 	void PeliKayntiin()
 	{
 		ClearAll(); 											// Tyhjennetään kenttä kaikista objekteista
-
 		Level.Background.Image = pelinTausta; 					// Ladataan keittiöstä kuva pelin taustaksi
 		Ainekset(ainekset);										// Lisätään ainekset kentälle, kun on valittu, että lähdetään paistamaan kinkkua.
 
+
 		// HIIREN KÄYTTÖ OBJEKTIEN LIIKUTTELUUN & TUTKIMISEEN
 		Mouse.Listen (MouseButton.Left, ButtonState.Pressed, KuunteleLiiketta2, "Jos ei koordinaatio riitä ;D");
-		Mouse.Listen (MouseButton.Left, ButtonState.Down, OnkoJoValmista, "Lisää aineksia kinkkuun mausteeksi.");
-		//Mouse.Listen (MouseButton.Left, ButtonState.Released, OnkoKinkunPaalla, "Lisää aineen kinkkuun jos se on kohdalla.");
+		Mouse.Listen (MouseButton.Left, ButtonState.Down, KuunteleLiiketta, "Lisää aineksia kinkkuun mausteeksi.");
+		Mouse.Listen (MouseButton.Left, ButtonState.Released, OnkoKinkunPaalla, null);
 
 
 		// VALIKKOON MENEMINEN
 		Keyboard.Listen (Key.Escape, ButtonState.Pressed, Valikko, "Avaa valikko");
 	}
 
+	/*
 	void OnkoJoValmista(){
 		if (lisattyKinkkuunString.Count >= 2) {
 			Widget ruutu1 = new Widget (100.0, 50.0);
-			Label lisatytmausteet = new Label ("Hei sul ois jo tarpeeks aineita");
+			Label lisatytmausteet = new Label ("Hei sul ois jo tarpeeks aineksia.");
 			ruutu1.Add (lisatytmausteet);
 			Add (ruutu1);
 		} else {
 			KuunteleLiiketta ();
 		}
 	}
-
+*/
 
 	void HallOfKinkkuhefe()
 	{
+		
 		// Fetchaa suoraa koneen käyttäjän nimi joka on oletuksena topscore nicki
+
+
+		// VALIKKOON MENEMINEN
+		Keyboard.Listen (Key.Escape, ButtonState.Pressed, Valikko, "Avaa valikko");
 	}
 
 
@@ -124,7 +130,6 @@ public class Kinkkuhefe : PhysicsGame
 		valikko.AddItemHandler(2, Exit);						// Poistu pelistä, kun nappia kaksi painetaan
 		valikko.AddItemHandler(0, PeliKayntiin);				// Aloittaa pelin kun ylintä nappia painetaan
 		valikko.AddItemHandler(1, HallOfKinkkuhefe);			// Näytetään top-score listaus 
-
 
 		logo = PhysicsObject.CreateStaticObject(923, 538);		// Logo alkuvalikon taustalle
 		logo.Image = LoadImage("hefeLogo");						// Logokuva
@@ -179,7 +184,7 @@ public class Kinkkuhefe : PhysicsGame
 	}
 
 
-
+	// KOMMENTTI AINEKSISTA KUN NE LISÄTÄÄN
 	void KommentitAineksista(int i){
 		
 		switch (i){
@@ -199,22 +204,6 @@ public class Kinkkuhefe : PhysicsGame
 	}
 
 
-	// KOMMENTOI LISÄTTYÄ AINETTA
-	void KommenttiAineista(int i)
-	{
-		if (i.Equals (1)) 
-		{
-			MessageDisplay.Add ("nössösti suolaa");
-			MessageDisplay.MaxMessageCount = 1;
-		} 
-
-		else if (i == 2) 
-		{
-			MessageDisplay.Add( "Voi veljet" );
-			MessageDisplay.MaxMessageCount = 1;
-		}
-	}
-
 
 	// HIIREN KUUNTELU ELI MITÄ TAPAHTUU KUN VASEMMALLA HIIRELLÄ KLIKATAAN OHI
 	void KuunteleLiiketta2()
@@ -228,95 +217,72 @@ public class Kinkkuhefe : PhysicsGame
 	void KuunteleLiiketta()
 	{   
 			MessageDisplay.Clear();							// Tyhjennetään tekstiruutu edellisestä viisastelusta.
+		if (lisattyKinkkuunString.Count >= 2) {
+			Widget ruutu1 = new Widget (100.0, 50.0);
+			Label lisatytmausteet = new Label ("Hei sul ois jo tarpeeks aineksia.");
+			ruutu1.Add (lisatytmausteet);
+			Add (ruutu1);
+		}
 
-			if (Mouse.IsCursorOn(elamansuola)) {
+			if (Mouse.IsCursorOn (elamansuola)) {
 				elamansuola.Position = Mouse.PositionOnWorld;
-				MessageDisplay.Add( "Käytä ensi kerralla Himalajan suolaa" );
+				MessageDisplay.Add ("Käytä ensi kerralla Himalajan suolaa");
 				MessageDisplay.MaxMessageCount = 0;
-			}
-				
-			else if (Mouse.IsCursorOn(hksininen)) {
+			} else if (Mouse.IsCursorOn (hksininen)) {
 				hksininen.Position = Mouse.PositionOnWorld;
-				MessageDisplay.Add( "Vähä kyrsää... Perus suomalaista!" );
+				MessageDisplay.Add ("Vähä kyrsää... Perus suomalaista!");
 				MessageDisplay.MaxMessageCount = 0;
-			}
-
-			else if (Mouse.IsCursorOn(jackdaniels)) {
+			} else if (Mouse.IsCursorOn (jackdaniels)) {
 				jackdaniels.Position = Mouse.PositionOnWorld;
-				MessageDisplay.Add( "Sullahan on ihan kehittynyt maku." );
+				MessageDisplay.Add ("Sullahan on ihan kehittynyt maku.");
 				MessageDisplay.MaxMessageCount = 0;
-			}
-
-
-			else if (Mouse.IsCursorOn(kebabkastike)) {
+			} else if (Mouse.IsCursorOn (kebabkastike)) {
 				kebabkastike.Position = Mouse.PositionOnWorld;
-				MessageDisplay.Add( "Oi että tää ei koskaan jätä kylmäks." );
+				MessageDisplay.Add ("Oi että tää ei koskaan jätä kylmäks.");
 				MessageDisplay.MaxMessageCount = 0;
-			} 
-
-			else if (Mouse.IsCursorOn(lanttu)) {
+			} else if (Mouse.IsCursorOn (lanttu)) {
 				lanttu.Position = Mouse.PositionOnWorld;
-				MessageDisplay.Add( "Meidän kunnioitettu puheenjohtaja." );
+				MessageDisplay.Add ("Meidän kunnioitettu puheenjohtaja.");
 				MessageDisplay.MaxMessageCount = 0;
-			} 
-
-			else if (Mouse.IsCursorOn(kossu)) {
+			} else if (Mouse.IsCursorOn (kossu)) {
 				kossu.Position = Mouse.PositionOnWorld;
-				MessageDisplay.Add( "RAI RAI!" );
+				MessageDisplay.Add ("RAI RAI!");
 				MessageDisplay.MaxMessageCount = 0;
-			}
-
-			else if (Mouse.IsCursorOn(mandariini)) {
+			} else if (Mouse.IsCursorOn (mandariini)) {
 				mandariini.Position = Mouse.PositionOnWorld;
-				MessageDisplay.Add( "Ootsää mies vai hanhi?" );
+				MessageDisplay.Add ("Ootsää mies vai hanhi?");
 				MessageDisplay.MaxMessageCount = 0;
-			}
-
-			else if (Mouse.IsCursorOn(marsipaani)) {
+			} else if (Mouse.IsCursorOn (marsipaani)) {
 				marsipaani.Position = Mouse.PositionOnWorld;
-				MessageDisplay.Add( "Herkkuperse!" );
+				MessageDisplay.Add ("Herkkuperse!");
 				MessageDisplay.MaxMessageCount = 0;
-			}
-
-			else if (Mouse.IsCursorOn(rakuuna)) {
+			} else if (Mouse.IsCursorOn (rakuuna)) {
 				rakuuna.Position = Mouse.PositionOnWorld;
-				MessageDisplay.Add( "Ei susta kyllä kokkia tule." );
+				MessageDisplay.Add ("Ei susta kyllä kokkia tule.");
 				MessageDisplay.MaxMessageCount = 0;
-			}
-
-			else if (Mouse.IsCursorOn(msmjauhe)) {
+			} else if (Mouse.IsCursorOn (msmjauhe)) {
 				msmjauhe.Position = Mouse.PositionOnWorld;
-				MessageDisplay.Add( "Et taida tietää mitä tää on..." );
+				MessageDisplay.Add ("Et taida tietää mitä tää on...");
 				MessageDisplay.MaxMessageCount = 0;
-			}
-
-			else if (Mouse.IsCursorOn(mustaherukka)) {
+			} else if (Mouse.IsCursorOn (mustaherukka)) {
 				mustaherukka.Position = Mouse.PositionOnWorld;
-				MessageDisplay.Add( "Rohkee veto, sekaan vaan!" );
+				MessageDisplay.Add ("Rohkee veto, sekaan vaan!");
 				MessageDisplay.MaxMessageCount = 0;
-			}
-
-			else if (Mouse.IsCursorOn(mustakitaturska)) {
+			} else if (Mouse.IsCursorOn (mustakitaturska)) {
 				mustakitaturska.Position = Mouse.PositionOnWorld;
-				MessageDisplay.Add( "Kalaa maailman pimeimmistä vesistä." );
+				MessageDisplay.Add ("Kalaa maailman pimeimmistä vesistä.");
 				MessageDisplay.MaxMessageCount = 0;
-			}
-
-			else if (Mouse.IsCursorOn(mustapippuri)) {
+			} else if (Mouse.IsCursorOn (mustapippuri)) {
 				mustapippuri.Position = Mouse.PositionOnWorld;
-				MessageDisplay.Add( "Turvallisin vaihtoehto... Vässykkä." );
+				MessageDisplay.Add ("Turvallisin vaihtoehto... Vässykkä.");
 				MessageDisplay.MaxMessageCount = 0;
-			}
-
-			else if (Mouse.IsCursorOn(sukkahousut)) {
+			} else if (Mouse.IsCursorOn (sukkahousut)) {
 				sukkahousut.Position = Mouse.PositionOnWorld;
-				MessageDisplay.Add( "Kannattaa kääriä kinkku tähän ettei kuivu." );
+				MessageDisplay.Add ("Kannattaa kääriä kinkku tähän ettei kuivu.");
 				MessageDisplay.MaxMessageCount = 0;
-			}
-
-			else if (Mouse.IsCursorOn(tilli)) {
+			} else if (Mouse.IsCursorOn (tilli)) {
 				tilli.Position = Mouse.PositionOnWorld;
-				MessageDisplay.Add( "Vaimo taas laittanu tillilihaa..." );
+				MessageDisplay.Add ("Vaimo taas laittanu tillilihaa...");
 				MessageDisplay.MaxMessageCount = 0;
 			}
 	}

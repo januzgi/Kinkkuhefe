@@ -12,8 +12,13 @@ public class Kinkkuhefe : PhysicsGame
 	Image pelinTausta = LoadImage("pelinTausta"); 			// Ladataan todellisen toiminnan aikainen näkymä.
 
 
-	// LUODAAN LISTA OBJEKTEILLE
-	List<PhysicsObject> ainekset = new List<PhysicsObject>();
+	// PISTEET KERTYY TÄHÄN
+	int pisteenLasku = 0; 
+
+
+	// PARI LISTAA
+	List<PhysicsObject> ainekset = new List<PhysicsObject>();	// Thö kinkun & aineksien lista
+	List<String> lisattyKinkkuunString = new List<String> (); 	// Lisätyt tuotteet
 
 
 	// OBJEKTIT
@@ -67,9 +72,6 @@ public class Kinkkuhefe : PhysicsGame
 		SmoothTextures = false;									// Reunojen pehmennys pois käytöstä.
 		Level.Background.Image = pelinTausta; 					// Ladataan keittiöstä kuva pelin taustaksi.
 		Valikko();												// Kutsutaan valikkoa heti alkuun, niin ei tarvitse pelaajan ESCiä painella.
-
-		// VALIKKOON MENEMINEN
-		// Keyboard.Listen (Key.Escape, ButtonState.Pressed, Valikko, "Avaa valikko");
 	}
 
 
@@ -83,12 +85,23 @@ public class Kinkkuhefe : PhysicsGame
 
 		// HIIREN KÄYTTÖ OBJEKTIEN LIIKUTTELUUN & TUTKIMISEEN
 		Mouse.Listen (MouseButton.Left, ButtonState.Pressed, KuunteleLiiketta2, "Jos ei koordinaatio riitä ;D");
-		Mouse.Listen (MouseButton.Left, ButtonState.Down, KuunteleLiiketta, "Lisää aineksia kinkkuun mausteeksi.");
+		Mouse.Listen (MouseButton.Left, ButtonState.Down, OnkoJoValmista, "Lisää aineksia kinkkuun mausteeksi.");
 		//Mouse.Listen (MouseButton.Left, ButtonState.Released, OnkoKinkunPaalla, "Lisää aineen kinkkuun jos se on kohdalla.");
 
 
 		// VALIKKOON MENEMINEN
 		Keyboard.Listen (Key.Escape, ButtonState.Pressed, Valikko, "Avaa valikko");
+	}
+
+	void OnkoJoValmista(){
+		if (lisattyKinkkuunString.Count >= 2) {
+			Widget ruutu1 = new Widget (100.0, 50.0);
+			Label lisatytmausteet = new Label ("Hei sul ois jo tarpeeks aineita");
+			ruutu1.Add (lisatytmausteet);
+			Add (ruutu1);
+		} else {
+			KuunteleLiiketta ();
+		}
 	}
 
 
@@ -119,20 +132,69 @@ public class Kinkkuhefe : PhysicsGame
 		Add (logo, 0);
 	}
 
-	/*
-	// AINEKSEN LISÄÄMINEN KINKKUUN
-	void OnkoKinkunPaalla()
-	{
-		if (Mouse.IsCursorOn (kinkku) || aines.Position == kinkku.Position) 
-		{
-			MultiSelectWindow ainesValikko = new MultiSelectWindow ("Kuinka paljon?", "Kolme kuppii", "4 tonnii", "10 metrii"); 
-			MessageDisplay.Clear ();
 
-			Add(ainesValikko);
-			int i = ainesValikko.SelectedIndex;
-			ainesValikko.DefaultCancel = 3;
-			KommenttiAineista(i);
-			aines.Destroy();
+	// AINEKSEN LISÄÄMINEN KINKKUUN
+	void OnkoKinkunPaalla(){			//Suolan Lisäys kinkkuun
+		if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (elamansuola)) {
+			MultiSelectWindow suolaValikko = new MultiSelectWindow ("paljonko laitetaan?", "kolme kuppii", "4 tonnii", "10 metrii"); 
+			elamansuola.Destroy ();
+			Add (suolaValikko);
+			lisattyKinkkuunString.Add ("elämänsuola");
+			MessageDisplay.Clear ();
+			suolaValikko.ItemSelected += KommentitAineksista;
+			int i = suolaValikko.SelectedIndex;
+		}
+
+		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (jackdaniels)) {
+			MultiSelectWindow suolaValikko = new MultiSelectWindow ("Paljonko laitetaan?", "Ujosti...", "Puolet meni kokkiin", "Järvisuomi"); 
+			jackdaniels.Destroy ();
+			MessageDisplay.Clear ();
+			lisattyKinkkuunString.Add ("Jack Daniels");
+			suolaValikko.ItemSelected += KommentitAineksista;
+			Add (suolaValikko);
+			int i = suolaValikko.SelectedIndex;
+			if (i == 0) {
+				pisteenLasku = pisteenLasku + 1;
+			} else if (i == 1) {
+				pisteenLasku += 3;
+			}
+		}
+
+		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (hksininen)) {
+			MultiSelectWindow suolaValikko = new MultiSelectWindow ("paljonko laitetaan?", "yks kyrsä", "metri Heikki", "Kela poika"); 
+			hksininen.Destroy ();
+			MessageDisplay.Clear ();
+			lisattyKinkkuunString.Add ("HK-Sininen");
+			suolaValikko.ItemSelected += KommentitAineksista;
+			Add (suolaValikko);
+			int i = suolaValikko.SelectedIndex;
+
+			if (i == 0) {
+				pisteenLasku = pisteenLasku + 1;
+			} else if (i == 1) {
+				pisteenLasku += 3;
+			}
+		}
+
+	}
+
+
+
+	void KommentitAineksista(int i){
+		
+		switch (i){
+		case 0 :
+			MessageDisplay.Add ("Nössösti lisätty!");
+			MessageDisplay.MaxMessageCount = 0;
+			break;
+		case 1:
+			MessageDisplay.Add ("Voi veljet q:-D");
+			MessageDisplay.MaxMessageCount = 0;
+			break;
+		case 2:
+			MessageDisplay.Add ("No älä nyt innostu!");
+			MessageDisplay.MaxMessageCount = 0;
+			break;
 		}
 	}
 
@@ -152,9 +214,9 @@ public class Kinkkuhefe : PhysicsGame
 			MessageDisplay.MaxMessageCount = 1;
 		}
 	}
-	*/
 
-	// HIIREN KUUNTELU ELI MITÄ TAPAHTUU KUN VASEMMALLA HIIRELLÄ VAAN KLIKATAAN
+
+	// HIIREN KUUNTELU ELI MITÄ TAPAHTUU KUN VASEMMALLA HIIRELLÄ KLIKATAAN OHI
 	void KuunteleLiiketta2()
 	{
 			MessageDisplay.Add ("TARTU KUIN MIES!");

@@ -67,6 +67,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Kinkkuhefe.cs" />
     <Compile Include="Ohjelma.cs" />
+    <Compile Include="Properties\testejä.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -102,6 +103,7 @@
     <BundleResource Include="Content\xboxohjain.png" />
     <BundleResource Include="Content\aloitusValikko.jpg" />
     <BundleResource Include="Content\pelinTausta.jpg" />
+    <BundleResource Include="Content\hefeLogo.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

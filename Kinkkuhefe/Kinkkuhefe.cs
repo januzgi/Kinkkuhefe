@@ -60,12 +60,15 @@ public class Kinkkuhefe : PhysicsGame
 	{
 		SetWindowSize(1920, 1080);	
 		MultiSelectWindow alkuValikko = new MultiSelectWindow("Oletko kova paistamaan kinkkua?", "OTETAAN!", "HALL OF KINKKUHEFE", "Syön mieluummin ananaspizzaa.");
+
 		alkuValikko.DefaultCancel = 3;							// Peruutusnäppäimellä pelistä pihalle eli ESC poistuu pelistä kuten "Syön mieluummin ananaspizzaa"
-		Level.Background.Image = pelinTausta; 					// Sitten tämä kun aletaan kunnolla kokkaamaan!
-		IsFullScreen = true; 									// Peli asetetaan kokonäytölle.			
+		//Level.Background.Image = pelinTausta; 					// Sitten tämä kun aletaan kunnolla kokkaamaan!
+		IsFullScreen = true; 									// Peli asetetaan kokonäytölle.	
+		Camera.ZoomToLevel(100);								// Koko tausta näkyvillä.
 		Mouse.IsCursorVisible = true; 							// Hiiri näkyviin.
 
-		Add(alkuValikko);
+		Add(alkuValikko);										// Pelin alkuvalikko
+		Ainekset(ainekset);										// Lisätään ainekset kentälle, kun on valittu, että lähdetään paistamaan kinkkua.
 								
 
 		// MAUSTEET / AINEKSET OBJEKTEIKSI
@@ -76,18 +79,48 @@ public class Kinkkuhefe : PhysicsGame
 		kinkku.Y = -20;
 		Add (kinkku, 0);
 
+
+		/*
+		// OHJEKENTTÄ PELAAJALLE
+		Label tekstikentta = new Label(300, 50, "ALAHAN KOKATA POIKA!");
+		tekstikentta.X = Screen.Right - 250;
+		tekstikentta.Y = Screen.Top - 50;
+		tekstikentta.TextColor = Color.DarkGray;
+		tekstikentta.BorderColor = Color.Black;
+		Add(tekstikentta);
+		*/
+
+
+		// HIIREN KÄYTTÖ OBJEKTIEN LIIKUTTELUUN & TUTKIMISEEN
+		Mouse.Listen (MouseButton.Left, ButtonState.Pressed, KuunteleLiiketta2, "Jos ei koordinaatio riitä ;D");
+		Mouse.Listen (MouseButton.Left, ButtonState.Down, KuunteleLiiketta, "Lisää aineksia kinkkuun mausteeksi.");
+		//Mouse.Listen (MouseButton.Left, ButtonState.Released, OnkoKinkunPaalla, "Lisää aineen kinkkuun jos se on kohdalla.");
+
+
+		// PELIN LOPETTAMINEN
+		PhoneBackButton.Listen (ConfirmExit, "Lopeta peli");
+		Keyboard.Listen (Key.Escape, ButtonState.Pressed, ConfirmExit, "Lopeta peli");
+	}
+
+
+	// LUODAAN OBJEKTEISTA LISTA & LISÄTÄÄN KAIKKI OBJEKTIT PELIIN
+	void Ainekset(List<PhysicsObject> ainekset)
+	{
+		ClearAll (); 												// Tyhjennetään kenttä kaikista peliolioista
+		Level.Background.Image = pelinTausta; 						// Ladataan keittiöstä kuva pelin pelaamistaustaksi
+
 		elamansuola = new PhysicsObject (Level.Width * 0.05, Level.Height * 0.1);
 		elamansuola.Image = LoadImage("elamansuola"); 				// 2. Lisätään suolapurkki
-		elamansuola.X = 100;
-		elamansuola.Y = 100;
+		elamansuola.Position = new Vector (200, 50);
 		elamansuola.Tag = "elamansuola";
-		Add (elamansuola, 1);
+		ainekset.Add (elamansuola);
+		Add (elamansuola, 1);										
 
 		hksininen = new PhysicsObject (Level.Width * 0.15, Level.Height * 0.075);
 		hksininen.Image = LoadImage("hksininen"); 					// 3. Lisätään HK:n sininen eli makkara
-		hksininen.X = 150;
-		hksininen.Y = -100;
+		hksininen.Position = new Vector (400, 50);
 		hksininen.Tag = "aines";
+		ainekset.Add (hksininen);
 		Add (hksininen, 1);
 
 		jackdaniels = new PhysicsObject (Level.Width * 0.075, Level.Height * 0.25);
@@ -174,33 +207,15 @@ public class Kinkkuhefe : PhysicsGame
 		sukkahousut.Tag = "aines";
 		Add (sukkahousut, 1);
 
-		tilli = new PhysicsObject (Level.Width * 0.2, Level.Height * 0.2);
+		tilli = new PhysicsObject (Level.Width * 0.125, Level.Height * 0.125);
 		tilli.Image = LoadImage("tilli"); 							// 16. Lisätään tilli
 		tilli.X = -600;
 		tilli.Y = -100;
 		tilli.Tag = "aines";
 		Add (tilli, 1);
 
-		/*
-		// OHJEKENTTÄ PELAAJALLE
-		Label tekstikentta = new Label(300, 50, "ALAHAN KOKATA POIKA!");
-		tekstikentta.X = Screen.Right - 250;
-		tekstikentta.Y = Screen.Top - 50;
-		tekstikentta.TextColor = Color.DarkGray;
-		tekstikentta.BorderColor = Color.Black;
-		Add(tekstikentta);
-		*/
 
 
-		// HIIREN KÄYTTÖ OBJEKTIEN LIIKUTTELUUN & TUTKIMISEEN
-		Mouse.Listen (MouseButton.Left, ButtonState.Pressed, KuunteleLiiketta2, "Jos ei koordinaatio riitä ;D");
-		Mouse.Listen (MouseButton.Left, ButtonState.Down, KuunteleLiiketta, "Lisää aineksia kinkkuun mausteeksi.");
-		//Mouse.Listen (MouseButton.Left, ButtonState.Released, OnkoKinkunPaalla, "Lisää aineen kinkkuun jos se on kohdalla.");
-
-
-		// PELIN LOPETTAMINEN
-		PhoneBackButton.Listen (ConfirmExit, "Lopeta peli");
-		Keyboard.Listen (Key.Escape, ButtonState.Pressed, ConfirmExit, "Lopeta peli");
 	}
 
 

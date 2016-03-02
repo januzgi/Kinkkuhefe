@@ -12,10 +12,6 @@ public class Kinkkuhefe : PhysicsGame
 	Image pelinTausta = LoadImage("pelinTausta"); 			// Ladataan todellisen toiminnan aikainen näkymä.
 
 
-	// ALKUVALIKON KOHDAT LISTA
-	//List<Label> valikonKohdat;
-
-
 	// LUODAAN LISTA OBJEKTEILLE
 	List<PhysicsObject> ainekset = new List<PhysicsObject>();
 
@@ -68,15 +64,22 @@ public class Kinkkuhefe : PhysicsGame
 		IsFullScreen = true; 									// Peli asetetaan kokonäytölle.	
 		Camera.ZoomToLevel(100);								// Koko tausta näkyvillä.
 		Mouse.IsCursorVisible = true; 							// Hiiri näkyviin.
-		SmoothTextures = false;									// Reunojen pehmennys pois käytöstä
+		SmoothTextures = false;									// Reunojen pehmennys pois käytöstä.
+		Level.Background.Image = pelinTausta; 					// Ladataan keittiöstä kuva pelin taustaksi.
+		Valikko();												// Kutsutaan valikkoa heti alkuun, niin ei tarvitse pelaajan ESCiä painella.
+
+		// VALIKKOON MENEMINEN
+		// Keyboard.Listen (Key.Escape, ButtonState.Pressed, Valikko, "Avaa valikko");
+	}
 
 
-		// THÖ KINKKU
-		kinkku = PhysicsObject.CreateStaticObject(Level.Width * 0.3, Level.Height * 0.2);
-		kinkku.Image = LoadImage("kinkku");							// 1. Lisätään kinkku
-		kinkku.Position = new Vector (-270, 0);
-		Add (kinkku, 0);
+	// KUN VALITAAN MENNÄ PELIIN
+	void PeliKayntiin()
+	{
+		ClearAll(); 											// Tyhjennetään kenttä kaikista objekteista
 
+		Level.Background.Image = pelinTausta; 					// Ladataan keittiöstä kuva pelin taustaksi
+		Ainekset(ainekset);										// Lisätään ainekset kentälle, kun on valittu, että lähdetään paistamaan kinkkua.
 
 		// HIIREN KÄYTTÖ OBJEKTIEN LIIKUTTELUUN & TUTKIMISEEN
 		Mouse.Listen (MouseButton.Left, ButtonState.Pressed, KuunteleLiiketta2, "Jos ei koordinaatio riitä ;D");
@@ -89,30 +92,16 @@ public class Kinkkuhefe : PhysicsGame
 	}
 
 
-	// KUN VALITAAN MENNÄ PELIIN
-	void PeliKayntiin()
-	{
-		ClearAll(); 											// Tyhjennetään kenttä kaikista objekteista
-
-		Level.Background.Image = valikkoTausta; 				// Ladataan keittiöstä kuva valikon taustaksi
-		Ainekset(ainekset);										// Lisätään ainekset kentälle, kun on valittu, että lähdetään paistamaan kinkkua.
-
-
-		// VALIKKOON MENEMINEN
-		Keyboard.Listen (Key.Escape, ButtonState.Pressed, Valikko, "Avaa valikko");
-	}
-
-
 	void HallOfKinkkuhefe()
 	{
-		
+		// Fetchaa suoraa koneen käyttäjän nimi joka on oletuksena topscore nicki
 	}
 
 
 	// LUODAAN ESC:illä AVATTAVA VALIKKO 
 	void Valikko(){
+		ClearAll(); 											// Tyhjennetään kenttä kaikista objekteista
 		MultiSelectWindow valikko = new MultiSelectWindow("", "JOO JOO KINKKUU TULILLE", "HALL OF KINKKUHEFE", "SYÖN MIELUUMMIN ANANASPIZZAA...");
-//		valikonKohdat = new List<Label> (); 					// Alustetaan lista, johon valikon kohdat tulevat
 		Level.Background.Image = valikkoTausta; 				// Ladataan keittiöstä kuva valikon taustaksi
 		Add(valikko);
 
@@ -274,6 +263,12 @@ public class Kinkkuhefe : PhysicsGame
 	// LUODAAN OBJEKTEISTA LISTA & LISÄTÄÄN KAIKKI OBJEKTIT PELIIN
 	void Ainekset(List<PhysicsObject> ainekset)
 	{
+		// THÖ KINKKU
+		kinkku = PhysicsObject.CreateStaticObject(Level.Width * 0.3, Level.Height * 0.2);
+		kinkku.Image = LoadImage("kinkku");							// 1. Lisätään kinkku
+		kinkku.Position = new Vector (-270, 0);
+		Add (kinkku, 0);
+
 		elamansuola = new PhysicsObject (Level.Width * 0.05, Level.Height * 0.1);
 		elamansuola.Image = LoadImage("elamansuola"); 				// 2. Lisätään suolapurkki
 		elamansuola.Position = new Vector (200, 50);

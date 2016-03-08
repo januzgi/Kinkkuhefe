@@ -39,6 +39,7 @@ public class Kinkkuhefe : PhysicsGame
 	PhysicsObject sukkahousut;		// 15.
 	PhysicsObject tilli;			// 16.
 
+	PhysicsObject radio;			// Lisätään radio ihan taustalle.
 	PhysicsObject logo;				// Logo fysiikkaolioksi
 
 	/*
@@ -55,14 +56,14 @@ public class Kinkkuhefe : PhysicsGame
 	/*
 	Image niittivyo = LoadImage("niittivyo"); 					// Lisätään niittivyö objekti 
 	Image pelargonia = LoadImage("pelargonia"); 				// Lisätään pelargonian objekti 
-	Image radio = LoadImage("radio"); 							// Lisätään radion objekti 
 	Image xboxohjain = LoadImage("xboxohjain"); 				// Lisätään xboxohjain
 	Image saunavihta = LoadImage("saunavihta"); 				// Lisätään saunavihta
 	*/
 
 
 	// LUODAAN ESC:illä AVATTAVA VALIKKO 
-	void Valikko(){
+	void Valikko()
+	{
 		ClearAll(); 											// Tyhjennetään kenttä kaikista objekteista
 		MultiSelectWindow valikko = new MultiSelectWindow("", "JOO JOO KINKKUU TULILLE", "HALL OF KINKKUHEFE", "SYÖN MIELUUMMIN ANANASPIZZAA...");
 		Level.Background.Image = valikkoTausta; 				// Ladataan keittiöstä kuva valikon taustaksi
@@ -99,13 +100,17 @@ public class Kinkkuhefe : PhysicsGame
 	// ITSE PELIIN
 	void PeliKayntiin()
 	{
-		Remove (logo);												// Tyhjennetään kenttä kaikista objekteista, mutta toki vain kerran
+		Remove (logo);											// Tyhjennetään kentältä logo
 		Level.Background.Image = pelinTausta; 					// Ladataan keittiöstä kuva pelin taustaksi
 		Ainekset(ainekset);										// Lisätään ainekset kentälle, kun on valittu, että lähdetään paistamaan kinkkua.
+
+
 		// HIIREN KÄYTTÖ OBJEKTIEN LIIKUTTELUUN & TUTKIMISEEN
 		Mouse.Listen (MouseButton.Left, ButtonState.Pressed, KuunteleLiiketta2, "Jos ei koordinaatio riitä ;D");
 		Mouse.Listen (MouseButton.Left, ButtonState.Down, KuunteleLiiketta, "Lisää aineksia kinkkuun mausteeksi.");
 		Mouse.Listen (MouseButton.Left, ButtonState.Released, OnkoKinkunPaalla, null);
+
+
 		// VALIKKOON MENEMINEN
 		Keyboard.Listen (Key.Escape, ButtonState.Pressed, Valikko, "Avaa valikko");
 	}
@@ -114,6 +119,8 @@ public class Kinkkuhefe : PhysicsGame
 	// HIGHSCORE TAULUKKO
 	void HallOfKinkkuhefe()
 	{
+		Add (radio);											// Lisätään radio taustalle koska JOHN CENAAAA
+
 		// Fetchaa suoraa koneen käyttäjän nimi joka on oletuksena topscore nicki
 		// Kun tulee uusi highscore niin JOHN CENAA / tietyn pistemäärän yli
 		// Vois heittää jonku hall of fame taustan
@@ -125,7 +132,8 @@ public class Kinkkuhefe : PhysicsGame
 
 
 	// AINEKSIEN LISÄÄMINEN KINKKUUN
-	void OnkoKinkunPaalla(){
+	void OnkoKinkunPaalla()
+	{
 		MessageDisplay.Clear ();																// Tyhjennetään tekstiruutu edellisestä viisastelusta.
 
 		if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (elamansuola)) {						// Suolan lisäys kinkkuun
@@ -133,16 +141,16 @@ public class Kinkkuhefe : PhysicsGame
 			elamansuola.Destroy ();
 			Add (suolaValikko);
 			lisattyKinkkuunString.Add ("suolaa");
-			//suolaValikko.ItemSelected += KommentitAineksista;
+			suolaValikko.ItemSelected += KommentitAineksista;
 			int i = suolaValikko.SelectedIndex;
 			AinestenMaara (suolaValikko.SelectedIndex);
 		}
 
-		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (jackdaniels)) {				// Jack Danielssin lisäys kinkkuun
+		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (jackdaniels)) {					// Jack Danielssin lisäys kinkkuun
 			MultiSelectWindow jackdanielsValikko = new MultiSelectWindow ("Kinkku uimaan viskiin?", "No ei, ihan ujosti päälle", "Puolet meni jo kokkiin", "Järvisuomi"); 
 			jackdaniels.Destroy ();
 			lisattyKinkkuunString.Add ("Jack Daniels viskiä");
-			//jackdanielsValikko.ItemSelected += KommentitAineksista;
+			jackdanielsValikko.ItemSelected += KommentitAineksista;
 			Add (jackdanielsValikko);
 			int i = jackdanielsValikko.SelectedIndex;
 			AinestenMaara (jackdanielsValikko.SelectedIndex);
@@ -151,7 +159,7 @@ public class Kinkkuhefe : PhysicsGame
 			MultiSelectWindow hksininenValikko = new MultiSelectWindow ("Ootsää mies vai hanhi?", "Yks kyrsä ny alkuun", "Metri-Heikki", "Norsunsuoli"); 
 			hksininen.Destroy ();
 			lisattyKinkkuunString.Add ("makkaraa");
-			//hksininenValikko.ItemSelected += KommentitAineksista;
+			hksininenValikko.ItemSelected += KommentitAineksista;
 			Add (hksininenValikko);
 			int i = hksininenValikko.SelectedIndex;
 			AinestenMaara (hksininenValikko.SelectedIndex);
@@ -160,7 +168,8 @@ public class Kinkkuhefe : PhysicsGame
 
 
 	// LISÄTTYJEN AINESTEN MÄÄRÄN RAJOITTAMINEN
-	void AinestenMaara(int indeksi){
+	void AinestenMaara(int indeksi)
+	{
 		int i = indeksi;
 		if (i == 0) {
 			pisteenLasku = pisteenLasku + 1;
@@ -170,10 +179,10 @@ public class Kinkkuhefe : PhysicsGame
 		}
 	}
 
-	/*
-// KOMMENTTI AINEKSISTA KUN NE LISÄTÄÄN
-	void KommentitAineksista(int i){
 
+	// KOMMENTTI AINEKSISTA KUN NE LISÄTÄÄN
+	void KommentitAineksista(int i)
+	{
 		switch (i){
 		case 0 :
 			MessageDisplay.Add ("Nössösti lisätty!");
@@ -184,11 +193,11 @@ public class Kinkkuhefe : PhysicsGame
 			MessageDisplay.MaxMessageCount = 0;
 			break;
 		case 2:
-			MessageDisplay.Add ("Päätyyn asti!");
+			MessageDisplay.Add ("Hautaan asti!");
 			MessageDisplay.MaxMessageCount = 0;
 			break;
 		}
-	}	*/
+	}
 
 
 	// HIIREN KUUNTELU ELI MITÄ TAPAHTUU KUN VASEMMALLA HIIRELLÄ KLIKATAAN OHI
@@ -203,6 +212,7 @@ public class Kinkkuhefe : PhysicsGame
 	void KuunteleLiiketta()
 	{   
 		MessageDisplay.Clear();							// Tyhjennetään tekstiruutu edellisestä viisastelusta.
+
 		/*
 	if (lisattyKinkkuunString.Count >= 2) {
 		Widget ruutu1 = new Widget (100.0, 50.0);
@@ -211,6 +221,7 @@ public class Kinkkuhefe : PhysicsGame
 		Add (ruutu1);
 	}
 	*/
+
 		if (Mouse.IsCursorOn (elamansuola)) {
 			elamansuola.Position = Mouse.PositionOnWorld;
 			MessageDisplay.Add ("Käytä ensi kerralla Himalajan suolaa");
@@ -292,95 +303,117 @@ public class Kinkkuhefe : PhysicsGame
 	// LUODAAN OBJEKTEISTA LISTA & LISÄTÄÄN KAIKKI OBJEKTIT PELIIN
 	void Ainekset(List<PhysicsObject> ainekset)
 	{
+
+		// THÖ RADIO
+		radio = PhysicsObject.CreateStaticObject(Level.Width * 0.3, Level.Height * 0.2);
+		radio.Image = LoadImage("radio");							// Lisätään radio taustalle
+		radio.Position = new Vector (-240, 100);
+		Add (radio, 0);
+
 		// THÖ KINKKU
 		kinkku = PhysicsObject.CreateStaticObject(Level.Width * 0.3, Level.Height * 0.2);
 		kinkku.Image = LoadImage("kinkku");							// 1. Lisätään kinkku
 		kinkku.Position = new Vector (-270, 0);
 		Add (kinkku, 0);
+
 		elamansuola = new PhysicsObject (Level.Width * 0.05, Level.Height * 0.1);
 		elamansuola.Image = LoadImage("elamansuola"); 				// 2. Lisätään suolapurkki
 		elamansuola.Position = new Vector (200, 50);
 		elamansuola.Tag = "elamansuola";
 		ainekset.Add (elamansuola);
-		Add (elamansuola, 1);										
+		Add (elamansuola, 1);
+
 		hksininen = new PhysicsObject (Level.Width * 0.15, Level.Height * 0.075);
 		hksininen.Image = LoadImage("hksininen"); 					// 3. Lisätään HK:n sininen eli makkara
 		hksininen.Position = new Vector (400, 50);
 		hksininen.Tag = "hksininen";
 		ainekset.Add (hksininen);
 		Add (hksininen, 1);
+
 		jackdaniels = new PhysicsObject (Level.Width * 0.075, Level.Height * 0.25);
 		jackdaniels.Image = LoadImage("jackdaniels"); 				// 4. Lisätään Jack Daniels viskipullo
 		jackdaniels.X = 200;
 		jackdaniels.Y = -100;
 		jackdaniels.Tag = "jackdaniels";
 		Add (jackdaniels, 1);
+
 		kebabkastike = new PhysicsObject (Level.Width * 0.15, Level.Height * 0.15);
 		kebabkastike.Image = LoadImage("kebabkastike"); 			// 5. Lisätään kebabkastikepurkit 
 		kebabkastike.X = 300;
 		kebabkastike.Y = -100;
 		kebabkastike.Tag = "kebabkastike";
 		Add (kebabkastike, 1);
+
 		lanttu = new PhysicsObject (Level.Width * 0.1, Level.Height * 0.1);
 		lanttu.Image = LoadImage("lanttu"); 						// 6. Lisätään kolmen lanttua
 		lanttu.X = 400;
 		lanttu.Y = -100;
 		lanttu.Tag = "lanttu";
 		Add (lanttu, 1);
+
 		kossu = new PhysicsObject (Level.Width * 0.075, Level.Height * 0.25);
 		kossu.Image = LoadImage("kossu"); 							// 7. Lisätään Koskenkorva viinapullo
 		kossu.X = 500;
 		kossu.Y = 100;
 		kossu.Tag = "kossu";
 		Add (kossu, 1);
+
 		mandariini = new PhysicsObject (Level.Width * 0.1, Level.Height * 0.1);
 		mandariini.Image = LoadImage("mandariini"); 				// 8. Lisätään mandariini
 		mandariini.X = 600;
 		mandariini.Y = -100;
 		mandariini.Tag = "mandariini";
 		Add (mandariini, 1);
+
 		marsipaani = new PhysicsObject (Level.Width * 0.1, Level.Height * 0.15);
 		marsipaani.Image = LoadImage("marsipaani"); 				// 9. Lisätään marsipaani
 		marsipaani.X = 700;
 		marsipaani.Y = 100;
 		marsipaani.Tag = "marsipaani";
 		Add (marsipaani, 1);
+
 		rakuuna = new PhysicsObject (Level.Width * 0.025, Level.Height * 0.07);
 		rakuuna.Image = LoadImage("rakuuna");						// 10. Lisätään rakuuna maustepurkki
 		rakuuna.X = -100;
 		rakuuna.Y = -100;
 		rakuuna.Tag = "rakuuna";
 		Add (rakuuna, 1);
+
 		msmjauhe = new PhysicsObject (Level.Width * 0.05, Level.Height * 0.05);
 		msmjauhe.Image = LoadImage("msmjauhe"); 					// 11. Lisätään MSM -jauhe kippo 
 		msmjauhe.X = -200;
 		msmjauhe.Y = 100;
 		msmjauhe.Tag = "msmjauhe";
 		Add (msmjauhe, 1);
+
 		mustaherukka = new PhysicsObject (Level.Width * 0.1, Level.Height * 0.1);
 		mustaherukka.Image = LoadImage("mustaherukka"); 			// 12. Lisätään mustaherukat 
 		mustaherukka.X = -300;
 		mustaherukka.Y = -100;
 		mustaherukka.Tag = "mustaherukka";
 		Add (mustaherukka, 1);
+
 		mustakitaturska = new PhysicsObject (Level.Width * 0.25, Level.Height * 0.1);
 		mustakitaturska.Image = LoadImage("mustakitaturska"); 		// 13. Lisätään mustakitaturskan
 		mustakitaturska.X = -400;
 		mustakitaturska.Y = 100;
 		mustakitaturska.Tag = "mustakitaturska";
 		Add (mustakitaturska, 1);
+
 		mustapippuri = new PhysicsObject (Level.Width * 0.1, Level.Height * 0.1);
 		mustapippuri.Image = LoadImage("mustapippuri"); 			// 14. Lisätään mustapippurit
 		mustapippuri.X = -500;
 		mustapippuri.Y = -100;
 		mustapippuri.Tag = "mustapippuri";
 		Add (mustapippuri, 1);
+
 		sukkahousut = new PhysicsObject (Level.Width * 0.15, Level.Height * 0.25);
 		sukkahousut.Image = LoadImage("sukkahousut"); 				// 15. Lisätään sukkahousut
 		sukkahousut.X = -600;
 		sukkahousut.Y = 100;
 		sukkahousut.Tag = "sukkahousut";
 		Add (sukkahousut, 1);
+
 		tilli = new PhysicsObject (Level.Width * 0.125, Level.Height * 0.125);
 		tilli.Image = LoadImage("tilli"); 							// 16. Lisätään tilli
 		tilli.X = -600;

@@ -1,2 +1,2 @@
-2016-03-08 19:06:38.665 Kinkkuhefe[1767:252134] Failed to connect (colorGridView) outlet from (NSApplication) to (NSColorPickerGridView): missing setter or instance variable
-2016-03-08 19:06:38.665 Kinkkuhefe[1767:252134] Failed to connect (view) outlet from (NSApplication) to (NSColorPickerGridView): missing setter or instance variable
+2016-03-08 19:23:06.850 Kinkkuhefe[2007:260678] Failed to connect (colorGridView) outlet from (NSApplication) to (NSColorPickerGridView): missing setter or instance variable
+2016-03-08 19:23:06.850 Kinkkuhefe[2007:260678] Failed to connect (view) outlet from (NSApplication) to (NSColorPickerGridView): missing setter or instance variable

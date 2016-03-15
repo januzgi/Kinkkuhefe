@@ -14,8 +14,15 @@ public class Kinkkuhefe : PhysicsGame
 	// HOK = Hall Of Kinkkuhefe
 	ScoreList HOK = new ScoreList(5, false, 0);
 
-	// PISTEET KERTYY TÄHÄN
-	int pisteenLasku = 0; 
+	// KINKKUUN LISATTYJEN AINESTEN MÄÄRÄ
+	int ainestenMaara = 0;
+
+	// PELAAJAN PISTEET
+	int pisteet = 0;
+
+	// MUSAT EI VAAB TOIMI ;G
+	// SoundEffect taustamusa = LoadSoundEffect("JCteema");
+	// SoundEffect uusRekordi = LoadSoundEffect("JC");
 
 	// PARI LISTAA
 	List<PhysicsObject> ainekset = new List<PhysicsObject>();	// Thö kinkun & aineksien lista
@@ -41,6 +48,7 @@ public class Kinkkuhefe : PhysicsGame
 
 	PhysicsObject radio;			// Lisätään radio ihan taustalle.
 	PhysicsObject logo;				// Logo fysiikkaolioksi
+
 
 	// LUODAAN ESC:illä AVATTAVA VALIKKO 
 	void Valikko()
@@ -74,9 +82,8 @@ public class Kinkkuhefe : PhysicsGame
 		Mouse.IsCursorVisible = true; 								// Hiiri näkyviin.
 		SmoothTextures = false;										// Reunojen pehmennys pois käytöstä.
 		Level.Background.Image = pelinTausta; 						// Ladataan keittiöstä kuva pelin taustaksi.
-		Valikko();													// Kutsutaan valikkoa heti alkuun, niin ei tarvitse pelaajan ESCiä painella.
-
-		HOK = DataStorage.TryLoad<ScoreList>(HOK, "pisteet.xml" );	// Hall of fame listaukselle data
+		HOK = DataStorage.TryLoad<ScoreList>(HOK, "pojot.xml" );	// Hall of fame listaukselle data
+		Valikko();													// Kutsutaan valikkoa heti alkuun, niin ei tarvitse pelaajan ESCiä painella
 	}
 
 
@@ -99,11 +106,24 @@ public class Kinkkuhefe : PhysicsGame
 	}
 
 
+	// PISTEIDEN TALLENNUS HALL OF KINKKUHEFEÄ VARTEN
+	void TallennaPisteet( Window sender )
+	{
+		DataStorage.Save<ScoreList>(HOK, "pojot.xml");
+	}
+
+
 	// HIGHSCORE TAULUKKO
 	void HallOfKinkkuhefe()
 	{
-
-
+		HighScoreWindow hallOfKinkku = new HighScoreWindow("                                 HALL OF KINKKUHEFE", 
+			"Pääsit kinkunpaiston all-staareihin pistein %p! Anna nickisi:", HOK, pisteet);
+		hallOfKinkku.Closed += TallennaPisteet;
+		Add(hallOfKinkku);
+		hallOfKinkku.Closed += delegate (Window sender) 
+		{
+			Valikko();
+		};
 
 		// Fetchaa suoraa koneen käyttäjän nimi joka on oletuksena topscore nicki
 		// Kun tulee uusi highscore niin JOHN CENAA / tietyn pistemäärän yli
@@ -161,10 +181,10 @@ public class Kinkkuhefe : PhysicsGame
 	{
 		int i = indeksi;
 		if (i == 0) {
-			pisteenLasku = pisteenLasku + 1;
+			ainestenMaara = ainestenMaara + 1;
 		} 
 		else if (i == 1) {
-			pisteenLasku += 3;
+			ainestenMaara += 3;
 		}
 	}
 

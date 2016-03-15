@@ -21,7 +21,7 @@ public class Kinkkuhefe : PhysicsGame
 	int pisteet = 0;
 
 	// MUSAT EI VAAB TOIMI ;G
-	// SoundEffect taustamusa = LoadSoundEffect("JCteema");
+	SoundEffect taustamusa = LoadSoundEffect("JCteema");
 	SoundEffect radiosta = LoadSoundEffect("JC");
 
 	// PARI LISTAA
@@ -168,6 +168,114 @@ public class Kinkkuhefe : PhysicsGame
 			int i = hksininenValikko.SelectedIndex;
 			AinestenMaara (hksininenValikko.SelectedIndex);
 		}
+		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (kebabkastike)) {					// Kebab kastikkeen lisäys kinkkuun
+			MultiSelectWindow kebabkastikeValikko = new MultiSelectWindow ("Ottaako kastike?", "Ei kiitos.", "Vähä koristeeks.", "Mina laitta jo!"); 
+			kebabkastike.Destroy ();
+			lisattyKinkkuunString.Add ("kebab kastiketta");
+			kebabkastikeValikko.ItemSelected += KommentitAineksista;
+			Add (kebabkastikeValikko);
+			int i = kebabkastikeValikko.SelectedIndex;
+			AinestenMaara (kebabkastikeValikko.SelectedIndex);
+		}
+		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (lanttu)) {					// Lantun lisäys kinkkuun
+			MultiSelectWindow lanttuValikko = new MultiSelectWindow ("Ethän sä tästä voi tykätä?", "Sano HYI!", "Niinku mämmi, tää toimii.", "Lanttu on mun isän nimi."); 
+			lanttu.Destroy ();
+			lisattyKinkkuunString.Add ("lanttua");
+			lanttuValikko.ItemSelected += KommentitAineksista;
+			Add (lanttuValikko);
+			int i = lanttuValikko.SelectedIndex;
+			AinestenMaara (lanttuValikko.SelectedIndex);
+		}
+		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (kossu)) {					// Kossun lisäys kinkkuun
+			MultiSelectWindow kossuValikko = new MultiSelectWindow ("Oletkos viinamäen miehiä?", "Juon vain siidereitä.", "Huomenna vapaapäivä...", "Keitän aamupuuron kossuun."); 
+			kossu.Destroy ();
+			lisattyKinkkuunString.Add ("kosanderia");
+			kossuValikko.ItemSelected += KommentitAineksista;
+			Add (kossuValikko);
+			int i = kossuValikko.SelectedIndex;
+			AinestenMaara (kossuValikko.SelectedIndex);
+		}
+		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (mandariini)) {					// Mandariinin lisäys kinkkuun
+			MultiSelectWindow mandariiniValikko = new MultiSelectWindow ("Taidat tietää mitä teet?", "En syö hedelmiä paitsi kinkun kanssa.", "Haistellaan.", "MANDARIINIGIINALAISTA SIGAA d:-D"); 
+			mandariini.Destroy ();
+			lisattyKinkkuunString.Add ("mandariini");
+			mandariiniValikko.ItemSelected += KommentitAineksista;
+			Add (mandariiniValikko);
+			int i = mandariiniValikko.SelectedIndex;
+			AinestenMaara (mandariiniValikko.SelectedIndex);
+		}
+		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (marsipaani)) {					// Marsipaanin lisäys kinkkuun
+			MultiSelectWindow marsipaaniValikko = new MultiSelectWindow ("Haluatko meille töihin?", "En. Ujutetaan vähä tohon päälle.", "Vihdoin sokerihumalaan.", "Marsi-MADAFAKIN-PAANIA!!!1"); 
+			marsipaani.Destroy ();
+			lisattyKinkkuunString.Add ("marsipaani");
+			marsipaaniValikko.ItemSelected += KommentitAineksista;
+			Add (marsipaaniValikko);
+			int i = marsipaaniValikko.SelectedIndex;
+			AinestenMaara (marsipaaniValikko.SelectedIndex);
+		}
+		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (rakuuna)) {					// Rakuunan lisäys kinkkuun
+			MultiSelectWindow rakuunaValikko = new MultiSelectWindow ("Kääri tää sätkään, päriC!", "Voi vilperi nyt poltellaan!", "Todellista mausteiden aatelia.", "Rakuuna-harppuuna-kanuuna"); 
+			rakuuna.Destroy ();
+			lisattyKinkkuunString.Add ("rakuuna");
+			rakuunaValikko.ItemSelected += KommentitAineksista;
+			Add (rakuunaValikko);
+			int i = rakuunaValikko.SelectedIndex;
+			AinestenMaara (rakuunaValikko.SelectedIndex);
+		}
+		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (msmjauhe)) {					// Msmjauhen lisäys kinkkuun
+			MultiSelectWindow msmjauheValikko = new MultiSelectWindow ("MSM jauhe on hyväksi kynsille.", "Olen puutarhuri.", "Silti sisälläni on aina ollut Megan Fox.", "Tyra Banxx jää mun kynsille toiseks."); 
+			msmjauhe.Destroy ();
+			lisattyKinkkuunString.Add ("msmjauhe");
+			msmjauheValikko.ItemSelected += KommentitAineksista;
+			Add (msmjauheValikko);
+			int i = msmjauheValikko.SelectedIndex;
+			AinestenMaara (msmjauheValikko.SelectedIndex);
+		}
+		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (mustaherukka)) {					// Mustaherukkan lisäys kinkkuun
+			MultiSelectWindow mustaherukkaValikko = new MultiSelectWindow ("Näistä saisi myös viiniä.", "Jäbä koittaa kusettaa!", "Nyt tehdään nevöföget-kinkku.", "On rasismia aina syödä vaaleaa kinkkua."); 
+			mustaherukka.Destroy ();
+			lisattyKinkkuunString.Add ("mustaherukka");
+			mustaherukkaValikko.ItemSelected += KommentitAineksista;
+			Add (mustaherukkaValikko);
+			int i = mustaherukkaValikko.SelectedIndex;
+			AinestenMaara (mustaherukkaValikko.SelectedIndex);
+		}
+		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (mustakitaturska)) {					// Mustakitaturskan lisäys kinkkuun
+			MultiSelectWindow mustakitaturskaValikko = new MultiSelectWindow ("Jos käyt kalassa tiedät mikä on paskahauki.", "Jep, ja tämä on vielä syvemmältä.", "Täähän on tonnikala!", "Tämä on sitä kuuluisaa Jäämeren kaviaaria."); 
+			mustakitaturska.Destroy ();
+			lisattyKinkkuunString.Add ("mustakitaturska");
+			mustakitaturskaValikko.ItemSelected += KommentitAineksista;
+			Add (mustakitaturskaValikko);
+			int i = mustakitaturskaValikko.SelectedIndex;
+			AinestenMaara (mustakitaturskaValikko.SelectedIndex);
+		}
+		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (mustapippuri)) {					// Mustapippurin lisäys kinkkuun
+			MultiSelectWindow mustapippuriValikko = new MultiSelectWindow ("Pimeimmän Afrikan mustinta pippuria.", "No offense Afrikka, mutta pidän vain vaahtokarkeista.", "Elämä on yhtä tyhjän kanssa ilman pippuria.", "Ja nii oo mäki."); 
+			mustapippuri.Destroy ();
+			lisattyKinkkuunString.Add ("mustapippuri");
+			mustapippuriValikko.ItemSelected += KommentitAineksista;
+			Add (mustapippuriValikko);
+			int i = mustapippuriValikko.SelectedIndex;
+			AinestenMaara (mustapippuriValikko.SelectedIndex);
+		}
+		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (sukkahousut)) {					// Sukkahousujen lisäys kinkkuun
+			MultiSelectWindow sukkahousutValikko = new MultiSelectWindow ("Taitaa olla vaimokkeen sukkahousut jäänyt pöydälle...", "Laitanpa nämä jalkaan.", "Pysyy ainakin kinkku mehevänä!"); 
+			sukkahousut.Destroy ();
+			lisattyKinkkuunString.Add ("sukkahousut");
+			sukkahousutValikko.ItemSelected += KommentitAineksista;
+			Add (sukkahousutValikko);
+			int i = sukkahousutValikko.SelectedIndex;
+			AinestenMaara (sukkahousutValikko.SelectedIndex);
+		}
+		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (tilli)) {					// Tillin lisäys kinkkuun
+			MultiSelectWindow tilliValikko = new MultiSelectWindow ("Tämä kasvi tuo muistoja mieleen nuoruudesta...", "Kun polttelimme salaa kasvihuoneen takana.", "Voisihan tätä vähän laittaa... Nenään.", "Silloin tehtiin tilliä kinkulla!!!"); 
+			tilli.Destroy ();
+			lisattyKinkkuunString.Add ("tilli");
+			tilliValikko.ItemSelected += KommentitAineksista;
+			Add (tilliValikko);
+			int i = tilliValikko.SelectedIndex;
+			AinestenMaara (tilliValikko.SelectedIndex);
+		}
 	}
 
 	// LISÄTTYJEN AINESTEN MÄÄRÄN RAJOITTAMINEN
@@ -288,14 +396,12 @@ public class Kinkkuhefe : PhysicsGame
 			MessageDisplay.Add ("Vaimo taas laittanu tillilihaa...");
 			MessageDisplay.MaxMessageCount = 0;
 		}
-		/*
 		else if (Mouse.IsCursorOn (radio)) {
 			radio.Position = Mouse.PositionOnWorld;
 			MessageDisplay.Add ("JOHN CENAAA");
 			MessageDisplay.MaxMessageCount = 0;
 			radiosta.Play ();
 		}
-		*/
 	}
 		
 	// LUODAAN OBJEKTEISTA LISTA & LISÄTÄÄN KAIKKI OBJEKTIT PELIIN

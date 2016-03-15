@@ -71,6 +71,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
+    <None Include="Content\JOHNCENAA.wav" />
+    <None Include="Content\JohnCenaTeema.wav" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Icon.png" />

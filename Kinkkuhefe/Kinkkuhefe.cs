@@ -11,9 +11,13 @@ public class Kinkkuhefe : PhysicsGame
 	Image valikkoTausta = LoadImage("aloitusValikko"); 		// Ladataan keittiöstä kuva alkuvalikon taustaksi.
 	Image pelinTausta = LoadImage("pelinTausta"); 			// Ladataan todellisen toiminnan aikainen näkymä.
 //	Image kinkkuUunissa = LoadImage("kinkkuaUunissa");		// Ladataan kuva kinkusta uunissa.
+//	Image kinkkuKylmana = LoadImage("kylmaKinkku");			// Ladataan kuva kinkusta liian lyhyen paiston jälkeen.
+//	Image kinkkuSopivana = LoadImage("sopivaKinkku");		// Ladataan kuva kinkusta sopivan paistamisen jälkeen.
+//	Image kinkkuPalanut = LoadImage("palanutKinkku");		// Ladataan kuva kinkusta lähes palamisen jälkeen.
+//	Image kinkutonUuni = LoadImage("uuniIlmanKinkkua");		// Ladataan kuva pelkästä uunista
 
 	// HOK = Hall Of Kinkkuhefe
-	ScoreList HOK = new ScoreList(5, false, 0);
+	ScoreList HOK = new ScoreList(5, false, 0);				// Listalle mahtuu 5 parasta, parhaat pisteet ensin, 0 minimi aluksi.
 
 	// KINKKUUN LISATTYJEN AINESTEN MÄÄRÄ
 	int kuinkaMonta = 3;
@@ -95,7 +99,6 @@ public class Kinkkuhefe : PhysicsGame
 
 
 		// HIIREN KÄYTTÖ OBJEKTIEN LIIKUTTELUUN & TUTKIMISEEN
-		Mouse.Listen (MouseButton.Left, ButtonState.Pressed, KuunteleLiiketta2, "Jos ei koordinaatio riitä ;D");
 		Mouse.Listen (MouseButton.Left, ButtonState.Down, OnkoJoValmista, "Jos kinkussa on jo tarpeeksi aineksia / Lisää aineksia kinkkuun mausteeksi.");
 		Mouse.Listen (MouseButton.Left, ButtonState.Released, OnkoKinkunPaalla, null);
 
@@ -105,7 +108,7 @@ public class Kinkkuhefe : PhysicsGame
 	}
 		
 	// PISTEIDEN TALLENNUS HALL OF KINKKUHEFEÄ VARTEN
-	void TallennaPisteet( Window sender )
+	void TallennaPisteet(Window sender)
 	{
 		DataStorage.Save<ScoreList>(HOK, "pojot.xml");
 	}
@@ -116,6 +119,8 @@ public class Kinkkuhefe : PhysicsGame
 		MessageDisplay.Clear();							// Tyhjennetään tekstiruutu edellisestä viisastelusta.
 		HighScoreWindow hallOfKinkku = new HighScoreWindow("                                 HALL OF KINKKUHEFE", 
 			"Pääsit kinkunpaiston all-staareihin pistein %p! Anna nickisi:", HOK, pisteidenLasku);
+		hallOfKinkku.NameInputWindow.Message.Text = "Onneksi olkoon! Sait {0:0} pistettä. Anna nimesi";
+		hallOfKinkku.List.ScoreFormat = "{0:0}";
 		hallOfKinkku.Closed += TallennaPisteet;
 		Add(hallOfKinkku);
 		hallOfKinkku.Closed += delegate (Window sender) 
@@ -128,12 +133,69 @@ public class Kinkkuhefe : PhysicsGame
 		// VALIKKOON MENEMINEN
 		Keyboard.Listen (Key.Escape, ButtonState.Pressed, Valikko, "Avaa valikko");
 	}
-
-
+		
 	// KINKKUU UUNIIN
 	void KinkkuUuniin()
 	{
-	//	Level.Background.Image = kinkkuUunissa; 						// Ladataan uunikinkusta kuva pelin taustaksi
+		ClearGameObjects ();
+		ClearTimers ();
+
+		MessageDisplay.Clear();									// Tyhjennetään tekstiruutu edellisestä viisastelusta.
+		MultiSelectWindow kinkunPaisto = new MultiSelectWindow("Pitkäänkö ajattelit paistaa?", "Nopeesti vaan ku on jo nälkä!",
+			"Kai semmonen reipas kolmisen tuntia riittää.", "Jätän yön yli paistuun.");
+		//Level.Background.Image = uuniIlmanKinkkua; 				// Uunista kuva kinkusta
+		lisattyKinkkuunString.Clear();
+		Add(kinkunPaisto);
+
+		//HANDLERIT
+		kinkunPaisto.AddItemHandler(0, KylmaKinkku);						// Lyhyt paisto
+		kinkunPaisto.AddItemHandler(1, SopivaKinkku);						// Juuri se oikea aika
+		kinkunPaisto.AddItemHandler(2, PalanutKinkku);						// Nyt menee jo överiks :-D
+	}
+
+	// KYLMÄKSI JÄÄNYT KINKKU
+	void KylmaKinkku()
+	{
+		ClearGameObjects ();												// Ettei jää nappulat ruudulle
+		MitaLisatty();														// Näytetään pelaajalle mitä hän lisäsi
+		Label loppuvinoilu = new Label("Mutsiski oli lämpimämpi viime kesänä.");
+		loppuvinoilu.Y = Screen.Top - 400;
+		Add(loppuvinoilu);
+		//	Level.Background.Image = kylmaKinkku; 						// Kylmänä uuniin laitettu kinkku
+	}
+
+	// SOPIVASTI PAISTUNUT KINKKU
+	void SopivaKinkku()
+	{
+		ClearGameObjects ();												// Ettei jää nappulat ruudulle
+		MitaLisatty();														// Näytetään pelaajalle mitä hän lisäsi
+		Label loppuvinoilu = new Label("Täähän näyttää ihan sopivasti paistetulta.");
+		loppuvinoilu.Y = Screen.Top - 400;
+		Add(loppuvinoilu);
+		//	Level.Background.Image = sopivaKinkku; 						// Sopivan aikaa uunissa ollut kinkku
+	}
+
+	// AIVAN PALANUT KINKKU
+	void PalanutKinkku()
+	{
+		ClearGameObjects ();												// Ettei jää nappulat ruudulle
+		MitaLisatty();														// Näytetään pelaajalle mitä hän lisäsi
+		Label loppuvinoilu = new Label("Jos saat samalla mitalla ku tää kinkku niin palat helvetin liekeissä!");
+		loppuvinoilu.Y = Screen.Top - 400;
+		Add(loppuvinoilu);
+		//	Level.Background.Image = palanutKinkku; 					// Liian pitkään uunissa ollut kinkku
+	}
+		
+	// MITÄ PELAAJA LISÄSI KINKUN SEKAAN
+	void MitaLisatty()
+	{
+		
+	}
+
+	// KINKKU TULLUT UUNISTA VALMIINA
+	void KinkkuValmiina()
+	{
+		ClearGameObjects ();												// Ettei jää nappulat ruudulle
 	}
 		
 	// KUN HALUAT LISÄTÄ VIELÄ MAUSTEEN
@@ -141,9 +203,12 @@ public class Kinkkuhefe : PhysicsGame
 	{
 		if (kuinkaMonta == 4) 
 		{
-			Label nytMeneeUuniin = new Label("Nyt menee jo uuniin!!!");
-			Add(nytMeneeUuniin);
-			KinkkuUuniin ();
+			MessageDisplay.Clear ();
+			MessageDisplay.Add("Nyt menee jo kinkku uuniin!");
+			Timer aikaa = new Timer();
+			aikaa.Start(1);
+			aikaa.Interval = 2;
+			aikaa.Timeout += KinkkuUuniin;
 		} 
 		else 
 		{
@@ -423,15 +488,6 @@ public class Kinkkuhefe : PhysicsGame
 		}
 	}
 
-	// HIIREN KUUNTELU ELI MITÄ TAPAHTUU KUN VASEMMALLA HIIRELLÄ KLIKATAAN OHI
-	void KuunteleLiiketta2()
-	{
-		MessageDisplay.Clear();							// Tyhjennetään tekstiruutu edellisestä viisastelusta.
-		
-		MessageDisplay.Add ("TARTU KUIN MIES!");
-		MessageDisplay.MaxMessageCount = 0;
-	}
-
 	// HIIREN KUUNTELU ELI MITÄ TAPAHTUU KUN VASEN HIIRI ON PAINETTU POHJAAN
 	void KuunteleLiiketta()
 	{   
@@ -589,7 +645,7 @@ public class Kinkkuhefe : PhysicsGame
 		ainekset.Add (marsipaani);
 		Add (marsipaani, 1);
 
-		rakuuna = new PhysicsObject (Level.Width * 0.025, Level.Height * 0.07);
+		rakuuna = new PhysicsObject (Level.Width * 0.03, Level.Height * 0.1);
 		rakuuna.Image = LoadImage("rakuuna");						// 10. Lisätään rakuuna maustepurkki
 		rakuuna.Position = new Vector (60, 0);
 		rakuuna.Tag = "rakuuna";

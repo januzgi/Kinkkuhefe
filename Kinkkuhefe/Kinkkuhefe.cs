@@ -10,19 +10,16 @@ public class Kinkkuhefe : PhysicsGame
 	// TAUSTAKUVAT
 	Image valikkoTausta = LoadImage("aloitusValikko"); 		// Ladataan keittiöstä kuva alkuvalikon taustaksi.
 	Image pelinTausta = LoadImage("pelinTausta"); 			// Ladataan todellisen toiminnan aikainen näkymä.
+//	Image kinkkuUunissa = LoadImage("kinkkuaUunissa");		// Ladataan kuva kinkusta uunissa.
 
 	// HOK = Hall Of Kinkkuhefe
 	ScoreList HOK = new ScoreList(5, false, 0);
 
 	// KINKKUUN LISATTYJEN AINESTEN MÄÄRÄ
-	int ainestenMaara = 0;
+	int kuinkaMonta = 3;
 
 	// PELAAJAN PISTEET
-	int pisteet = 0;
-
-	// MUSAT EI VAAB TOIMI ;G
-	SoundEffect taustamusa = LoadSoundEffect("JCteema");
-	SoundEffect radiosta = LoadSoundEffect("JC");
+	int pisteidenLasku = 0;
 
 	// PARI LISTAA
 	List<PhysicsObject> ainekset = new List<PhysicsObject>();	// Thö kinkun & aineksien lista
@@ -54,9 +51,11 @@ public class Kinkkuhefe : PhysicsGame
 	// LUODAAN ESC:illä AVATTAVA VALIKKO 
 	void Valikko()
 	{
-		ClearAll(); 											// Tyhjennetään kenttä kaikista objekteista
+		ClearGameObjects ();									// Ettei jää nappulat ruudulle
+		MessageDisplay.Clear();									// Tyhjennetään tekstiruutu edellisestä viisastelusta.
 		MultiSelectWindow valikko = new MultiSelectWindow("", "JOO JOO KINKKUU TULILLE", "HALL OF KINKKUHEFE", "SYÖN MIELUUMMIN ANANASPIZZAA...");
 		Level.Background.Image = valikkoTausta; 				// Ladataan keittiöstä kuva valikon taustaksi
+		lisattyKinkkuunString.Clear();
 		Add(valikko);
 
 
@@ -89,6 +88,7 @@ public class Kinkkuhefe : PhysicsGame
 	// ITSE PELIIN
 	void PeliKayntiin()
 	{
+		MessageDisplay.Clear();									// Tyhjennetään tekstiruutu edellisestä viisastelusta.
 		Remove (logo);											// Tyhjennetään kentältä logo
 		Level.Background.Image = pelinTausta; 					// Ladataan keittiöstä kuva pelin taustaksi
 		Ainekset(ainekset);										// Lisätään ainekset kentälle, kun on valittu, että lähdetään paistamaan kinkkua.
@@ -96,7 +96,7 @@ public class Kinkkuhefe : PhysicsGame
 
 		// HIIREN KÄYTTÖ OBJEKTIEN LIIKUTTELUUN & TUTKIMISEEN
 		Mouse.Listen (MouseButton.Left, ButtonState.Pressed, KuunteleLiiketta2, "Jos ei koordinaatio riitä ;D");
-		Mouse.Listen (MouseButton.Left, ButtonState.Down, KuunteleLiiketta, "Lisää aineksia kinkkuun mausteeksi.");
+		Mouse.Listen (MouseButton.Left, ButtonState.Down, OnkoJoValmista, "Jos kinkussa on jo tarpeeksi aineksia / Lisää aineksia kinkkuun mausteeksi.");
 		Mouse.Listen (MouseButton.Left, ButtonState.Released, OnkoKinkunPaalla, null);
 
 
@@ -113,42 +113,84 @@ public class Kinkkuhefe : PhysicsGame
 	// HIGHSCORE TAULUKKO
 	void HallOfKinkkuhefe()
 	{
+		MessageDisplay.Clear();							// Tyhjennetään tekstiruutu edellisestä viisastelusta.
 		HighScoreWindow hallOfKinkku = new HighScoreWindow("                                 HALL OF KINKKUHEFE", 
-			"Pääsit kinkunpaiston all-staareihin pistein %p! Anna nickisi:", HOK, pisteet);
+			"Pääsit kinkunpaiston all-staareihin pistein %p! Anna nickisi:", HOK, pisteidenLasku);
 		hallOfKinkku.Closed += TallennaPisteet;
 		Add(hallOfKinkku);
 		hallOfKinkku.Closed += delegate (Window sender) 
 		{
 			Valikko();
 		};
-
 		// Fetchaa suoraa koneen käyttäjän nimi joka on oletuksena topscore nicki
-		// Kun tulee uusi highscore niin JOHN CENAA / tietyn pistemäärän yli
 
 
 		// VALIKKOON MENEMINEN
 		Keyboard.Listen (Key.Escape, ButtonState.Pressed, Valikko, "Avaa valikko");
 	}
 
+
+	// KINKKUU UUNIIN
+	void KinkkuUuniin()
+	{
+	//	Level.Background.Image = kinkkuUunissa; 						// Ladataan uunikinkusta kuva pelin taustaksi
+	}
+		
+	// KUN HALUAT LISÄTÄ VIELÄ MAUSTEEN
+	void LisaMauste()
+	{
+		if (kuinkaMonta == 4) 
+		{
+			Label nytMeneeUuniin = new Label("Nyt menee jo uuniin!!!");
+			Add(nytMeneeUuniin);
+			KinkkuUuniin ();
+		} 
+		else 
+		{
+			kuinkaMonta++;
+		}
+	}
+		
+	// ONKO KINKUSSA TARPEEKS AINEKSIA
+	void OnkoJoValmista()
+	{
+		MessageDisplay.Clear ();																// Tyhjennetään tekstiruutu edellisestä viisastelusta.
+		if (lisattyKinkkuunString.Count >= kuinkaMonta) 
+		{
+			MultiSelectWindow kinkkuUuniinValikko = new MultiSelectWindow ("Mausteiden puolesta aika laittaa kinkku uuniin.", 
+				"Kinkkuu uuniin!", "Vielä vähän lisää mausteita...", "Pidä kinkkus!");
+			Add (kinkkuUuniinValikko);
+
+			//HANDLERIT
+			kinkkuUuniinValikko.AddItemHandler(0, KinkkuUuniin);				// Kinkku menee uuniin paistumaan
+			kinkkuUuniinValikko.AddItemHandler(1, LisaMauste);					// Jatketaan maustamista
+			kinkkuUuniinValikko.AddItemHandler(2, Valikko);						// Poistuu pelistä alkuun
+		} 
+		else 
+		{
+			KuunteleLiiketta ();
+		}
+	}
+		
 	// AINEKSIEN LISÄÄMINEN KINKKUUN
 	void OnkoKinkunPaalla()
 	{
 		MessageDisplay.Clear ();																// Tyhjennetään tekstiruutu edellisestä viisastelusta.
 
-		if (lisattyKinkkuunString.Count > 2) {
-			Widget ruutu1 = new Widget (300, 50.0);
-			Label lisatytmausteet = new Label ("Mausteiden puolesta aika laittaa kinkku uuniin.");
-			ruutu1.Add (lisatytmausteet);
-			Add (ruutu1);
-		}
-		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (elamansuola)) {						// Suolan lisäys kinkkuun
+			if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (elamansuola)) {						// Suolan lisäys kinkkuun
 			MultiSelectWindow suolaValikko = new MultiSelectWindow ("Kuinka suolaista meinasit?", "Ripaus sinne tänne", "Kourallinen", "Kilpirauhasen räjäytys"); 
 			elamansuola.Destroy ();
-			Add (suolaValikko);
 			lisattyKinkkuunString.Add ("suolaa");
 			suolaValikko.ItemSelected += KommentitAineksista;
+			Add (suolaValikko);
+
 			int i = suolaValikko.SelectedIndex;
-			AinestenMaara (suolaValikko.SelectedIndex);
+			if (i == 0) {
+				pisteidenLasku = pisteidenLasku + 1;
+			} 
+			else if (i == 1) {
+				pisteidenLasku += 3;
+			}
 		}
 		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (jackdaniels)) {					// Jack Danielssin lisäys kinkkuun
 			MultiSelectWindow jackdanielsValikko = new MultiSelectWindow ("Kinkku uimaan viskiin?", "No ei, ihan ujosti päälle", "Puolet meni jo kokkiin", "Järvisuomi"); 
@@ -156,8 +198,14 @@ public class Kinkkuhefe : PhysicsGame
 			lisattyKinkkuunString.Add ("Jack Daniels viskiä");
 			jackdanielsValikko.ItemSelected += KommentitAineksista;
 			Add (jackdanielsValikko);
+
 			int i = jackdanielsValikko.SelectedIndex;
-			AinestenMaara (jackdanielsValikko.SelectedIndex);
+			if (i == 0) {
+				pisteidenLasku = pisteidenLasku + 1;
+			} 
+			else if (i == 2) {
+				pisteidenLasku += 3;
+			}
 		}
 		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (hksininen)) {					// Makkaran lisäys kinkkuun
 			MultiSelectWindow hksininenValikko = new MultiSelectWindow ("Ootsää mies vai hanhi?", "Yks kyrsä ny alkuun", "Metri-Heikki", "Norsunsuoli"); 
@@ -165,17 +213,29 @@ public class Kinkkuhefe : PhysicsGame
 			lisattyKinkkuunString.Add ("makkaraa");
 			hksininenValikko.ItemSelected += KommentitAineksista;
 			Add (hksininenValikko);
+
 			int i = hksininenValikko.SelectedIndex;
-			AinestenMaara (hksininenValikko.SelectedIndex);
+			if (i == 0) {
+				pisteidenLasku = pisteidenLasku + 1;
+			} 
+			else if (i == 1) {
+				pisteidenLasku += 3;
+			}
 		}
-		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (kebabkastike)) {					// Kebab kastikkeen lisäys kinkkuun
+		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (kebabkastike)) {					// Kebabkastikkeen lisäys kinkkuun
 			MultiSelectWindow kebabkastikeValikko = new MultiSelectWindow ("Ottaako kastike?", "Ei kiitos.", "Vähä koristeeks.", "Mina laitta jo!"); 
 			kebabkastike.Destroy ();
 			lisattyKinkkuunString.Add ("kebab kastiketta");
 			kebabkastikeValikko.ItemSelected += KommentitAineksista;
 			Add (kebabkastikeValikko);
+
 			int i = kebabkastikeValikko.SelectedIndex;
-			AinestenMaara (kebabkastikeValikko.SelectedIndex);
+			if (i == 1) {
+				pisteidenLasku = pisteidenLasku + 1;
+			} 
+			else if (i == 2) {
+				pisteidenLasku += 3;
+			}
 		}
 		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (lanttu)) {					// Lantun lisäys kinkkuun
 			MultiSelectWindow lanttuValikko = new MultiSelectWindow ("Ethän sä tästä voi tykätä?", "Sano HYI!", "Niinku mämmi, tää toimii.", "Lanttu on mun isän nimi."); 
@@ -183,8 +243,14 @@ public class Kinkkuhefe : PhysicsGame
 			lisattyKinkkuunString.Add ("lanttua");
 			lanttuValikko.ItemSelected += KommentitAineksista;
 			Add (lanttuValikko);
+
 			int i = lanttuValikko.SelectedIndex;
-			AinestenMaara (lanttuValikko.SelectedIndex);
+			if (i == 2) {
+				pisteidenLasku = pisteidenLasku + 3;
+			} 
+			else if (i == 0) {
+				pisteidenLasku += 3;
+			}
 		}
 		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (kossu)) {					// Kossun lisäys kinkkuun
 			MultiSelectWindow kossuValikko = new MultiSelectWindow ("Oletkos viinamäen miehiä?", "Juon vain siidereitä.", "Huomenna vapaapäivä...", "Keitän aamupuuron kossuun."); 
@@ -192,8 +258,14 @@ public class Kinkkuhefe : PhysicsGame
 			lisattyKinkkuunString.Add ("kosanderia");
 			kossuValikko.ItemSelected += KommentitAineksista;
 			Add (kossuValikko);
+
 			int i = kossuValikko.SelectedIndex;
-			AinestenMaara (kossuValikko.SelectedIndex);
+			if (i == 2) {
+				pisteidenLasku = pisteidenLasku + 1;
+			} 
+			else if (i == 1) {
+				pisteidenLasku += 3;
+			}
 		}
 		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (mandariini)) {					// Mandariinin lisäys kinkkuun
 			MultiSelectWindow mandariiniValikko = new MultiSelectWindow ("Taidat tietää mitä teet?", "En syö hedelmiä paitsi kinkun kanssa.", "Haistellaan.", "MANDARIINIGIINALAISTA SIGAA d:-D"); 
@@ -201,8 +273,14 @@ public class Kinkkuhefe : PhysicsGame
 			lisattyKinkkuunString.Add ("mandariini");
 			mandariiniValikko.ItemSelected += KommentitAineksista;
 			Add (mandariiniValikko);
+
 			int i = mandariiniValikko.SelectedIndex;
-			AinestenMaara (mandariiniValikko.SelectedIndex);
+			if (i == 1) {
+				pisteidenLasku = pisteidenLasku + 1;
+			} 
+			else if (i == 2) {
+				pisteidenLasku += 3;
+			}
 		}
 		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (marsipaani)) {					// Marsipaanin lisäys kinkkuun
 			MultiSelectWindow marsipaaniValikko = new MultiSelectWindow ("Haluatko meille töihin?", "En. Ujutetaan vähä tohon päälle.", "Vihdoin sokerihumalaan.", "Marsi-MADAFAKIN-PAANIA!!!1"); 
@@ -210,8 +288,14 @@ public class Kinkkuhefe : PhysicsGame
 			lisattyKinkkuunString.Add ("marsipaani");
 			marsipaaniValikko.ItemSelected += KommentitAineksista;
 			Add (marsipaaniValikko);
+
 			int i = marsipaaniValikko.SelectedIndex;
-			AinestenMaara (marsipaaniValikko.SelectedIndex);
+			if (i == 1) {
+				pisteidenLasku = pisteidenLasku + 1;
+			} 
+			else if (i == 0) {
+				pisteidenLasku += 3;
+			}
 		}
 		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (rakuuna)) {					// Rakuunan lisäys kinkkuun
 			MultiSelectWindow rakuunaValikko = new MultiSelectWindow ("Kääri tää sätkään, päriC!", "Voi vilperi nyt poltellaan!", "Todellista mausteiden aatelia.", "Rakuuna-harppuuna-kanuuna"); 
@@ -219,8 +303,14 @@ public class Kinkkuhefe : PhysicsGame
 			lisattyKinkkuunString.Add ("rakuuna");
 			rakuunaValikko.ItemSelected += KommentitAineksista;
 			Add (rakuunaValikko);
+
 			int i = rakuunaValikko.SelectedIndex;
-			AinestenMaara (rakuunaValikko.SelectedIndex);
+			if (i == 2) {
+				pisteidenLasku = pisteidenLasku + 1;
+			} 
+			else if (i == 1) {
+				pisteidenLasku += 3;
+			}
 		}
 		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (msmjauhe)) {					// Msmjauhen lisäys kinkkuun
 			MultiSelectWindow msmjauheValikko = new MultiSelectWindow ("MSM jauhe on hyväksi kynsille.", "Olen puutarhuri.", "Silti sisälläni on aina ollut Megan Fox.", "Tyra Banxx jää mun kynsille toiseks."); 
@@ -228,8 +318,14 @@ public class Kinkkuhefe : PhysicsGame
 			lisattyKinkkuunString.Add ("msmjauhe");
 			msmjauheValikko.ItemSelected += KommentitAineksista;
 			Add (msmjauheValikko);
+
 			int i = msmjauheValikko.SelectedIndex;
-			AinestenMaara (msmjauheValikko.SelectedIndex);
+			if (i == 1) {
+				pisteidenLasku = pisteidenLasku + 1;
+			} 
+			else if (i == 2) {
+				pisteidenLasku += 3;
+			}
 		}
 		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (mustaherukka)) {					// Mustaherukkan lisäys kinkkuun
 			MultiSelectWindow mustaherukkaValikko = new MultiSelectWindow ("Näistä saisi myös viiniä.", "Jäbä koittaa kusettaa!", "Nyt tehdään nevöföget-kinkku.", "On rasismia aina syödä vaaleaa kinkkua."); 
@@ -237,8 +333,14 @@ public class Kinkkuhefe : PhysicsGame
 			lisattyKinkkuunString.Add ("mustaherukka");
 			mustaherukkaValikko.ItemSelected += KommentitAineksista;
 			Add (mustaherukkaValikko);
+
 			int i = mustaherukkaValikko.SelectedIndex;
-			AinestenMaara (mustaherukkaValikko.SelectedIndex);
+			if (i == 1) {
+				pisteidenLasku = pisteidenLasku + 1;
+			} 
+			else if (i == 2) {
+				pisteidenLasku += 3;
+			}
 		}
 		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (mustakitaturska)) {					// Mustakitaturskan lisäys kinkkuun
 			MultiSelectWindow mustakitaturskaValikko = new MultiSelectWindow ("Jos käyt kalassa tiedät mikä on paskahauki.", "Jep, ja tämä on vielä syvemmältä.", "Täähän on tonnikala!", "Tämä on sitä kuuluisaa Jäämeren kaviaaria."); 
@@ -246,17 +348,29 @@ public class Kinkkuhefe : PhysicsGame
 			lisattyKinkkuunString.Add ("mustakitaturska");
 			mustakitaturskaValikko.ItemSelected += KommentitAineksista;
 			Add (mustakitaturskaValikko);
+
 			int i = mustakitaturskaValikko.SelectedIndex;
-			AinestenMaara (mustakitaturskaValikko.SelectedIndex);
+			if (i == 1) {
+				pisteidenLasku = pisteidenLasku + 1;
+			} 
+			else if (i == 0) {
+				pisteidenLasku += 3;
+			}
 		}
 		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (mustapippuri)) {					// Mustapippurin lisäys kinkkuun
-			MultiSelectWindow mustapippuriValikko = new MultiSelectWindow ("Pimeimmän Afrikan mustinta pippuria.", "No offense Afrikka, mutta pidän vain vaahtokarkeista.", "Elämä on yhtä tyhjän kanssa ilman pippuria.", "Ja nii oo mäki."); 
+			MultiSelectWindow mustapippuriValikko = new MultiSelectWindow ("Pimeimmän Afrikan mustinta pippuria.", "No offense Afrikka, mutta pidän vain vaahtokarkeista.", "Elämä on yhtä tyhjän kanssa ilman pippuria.", "MUSTABEPEE!!!"); 
 			mustapippuri.Destroy ();
 			lisattyKinkkuunString.Add ("mustapippuri");
 			mustapippuriValikko.ItemSelected += KommentitAineksista;
 			Add (mustapippuriValikko);
+
 			int i = mustapippuriValikko.SelectedIndex;
-			AinestenMaara (mustapippuriValikko.SelectedIndex);
+			if (i == 1) {
+				pisteidenLasku = pisteidenLasku + 1;
+			} 
+			else if (i == 2) {
+				pisteidenLasku += 3;
+			}
 		}
 		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (sukkahousut)) {					// Sukkahousujen lisäys kinkkuun
 			MultiSelectWindow sukkahousutValikko = new MultiSelectWindow ("Taitaa olla vaimokkeen sukkahousut jäänyt pöydälle...", "Laitanpa nämä jalkaan.", "Pysyy ainakin kinkku mehevänä!"); 
@@ -264,8 +378,14 @@ public class Kinkkuhefe : PhysicsGame
 			lisattyKinkkuunString.Add ("sukkahousut");
 			sukkahousutValikko.ItemSelected += KommentitAineksista;
 			Add (sukkahousutValikko);
+
 			int i = sukkahousutValikko.SelectedIndex;
-			AinestenMaara (sukkahousutValikko.SelectedIndex);
+			if (i == 1) {
+				pisteidenLasku = pisteidenLasku + 1;
+			} 
+			else if (i == 0) {
+				pisteidenLasku += 3;
+			}
 		}
 		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (tilli)) {					// Tillin lisäys kinkkuun
 			MultiSelectWindow tilliValikko = new MultiSelectWindow ("Tämä kasvi tuo muistoja mieleen nuoruudesta...", "Kun polttelimme salaa kasvihuoneen takana.", "Voisihan tätä vähän laittaa... Nenään.", "Silloin tehtiin tilliä kinkulla!!!"); 
@@ -273,23 +393,17 @@ public class Kinkkuhefe : PhysicsGame
 			lisattyKinkkuunString.Add ("tilli");
 			tilliValikko.ItemSelected += KommentitAineksista;
 			Add (tilliValikko);
+
 			int i = tilliValikko.SelectedIndex;
-			AinestenMaara (tilliValikko.SelectedIndex);
+			if (i == 1) {
+				pisteidenLasku = pisteidenLasku + 1;
+			} 
+			else if (i == 2) {
+				pisteidenLasku += 3;
+			}
 		}
 	}
-
-	// LISÄTTYJEN AINESTEN MÄÄRÄN RAJOITTAMINEN
-	void AinestenMaara(int indeksi)
-	{
-		int i = indeksi;
-		if (i == 0) {
-			ainestenMaara = ainestenMaara + 1;
-		} 
-		else if (i == 1) {
-			ainestenMaara += 3;
-		}
-	}
-
+		
 	// KOMMENTTI AINEKSISTA KUN NE LISÄTÄÄN
 	void KommentitAineksista(int i)
 	{
@@ -312,6 +426,8 @@ public class Kinkkuhefe : PhysicsGame
 	// HIIREN KUUNTELU ELI MITÄ TAPAHTUU KUN VASEMMALLA HIIRELLÄ KLIKATAAN OHI
 	void KuunteleLiiketta2()
 	{
+		MessageDisplay.Clear();							// Tyhjennetään tekstiruutu edellisestä viisastelusta.
+		
 		MessageDisplay.Add ("TARTU KUIN MIES!");
 		MessageDisplay.MaxMessageCount = 0;
 	}
@@ -397,10 +513,8 @@ public class Kinkkuhefe : PhysicsGame
 			MessageDisplay.MaxMessageCount = 0;
 		}
 		else if (Mouse.IsCursorOn (radio)) {
-			radio.Position = Mouse.PositionOnWorld;
 			MessageDisplay.Add ("JOHN CENAAA");
 			MessageDisplay.MaxMessageCount = 0;
-			radiosta.Play ();
 		}
 	}
 		

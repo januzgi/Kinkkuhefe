@@ -71,10 +71,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
-    <None Include="Content\JOHNCENAA.mp3" />
-    <None Include="Content\JohnCenaTeema.mp3" />
-    <None Include="Content\JC.wav" />
-    <None Include="Content\JCteema.wav" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Icon.png" />
@@ -85,29 +81,24 @@
     <BundleResource Include="Content\kinkku.png" />
     <BundleResource Include="Content\kossu.png" />
     <BundleResource Include="Content\lanttu.png" />
-    <BundleResource Include="Content\loylykauha.png" />
     <BundleResource Include="Content\mandariini.png" />
     <BundleResource Include="Content\marsipaani.png" />
-    <BundleResource Include="Content\mitta1dl.png" />
-    <BundleResource Include="Content\mittaruokalusikka.png" />
-    <BundleResource Include="Content\mittateelusikka.png" />
     <BundleResource Include="Content\msmjauhe.png" />
     <BundleResource Include="Content\mustaherukka.png" />
     <BundleResource Include="Content\mustakitaturska.png" />
     <BundleResource Include="Content\mustapippuri.png" />
-    <BundleResource Include="Content\niittivyo.png" />
-    <BundleResource Include="Content\pelargonia.png" />
     <BundleResource Include="Content\radio.png" />
     <BundleResource Include="Content\rakuuna.png" />
-    <BundleResource Include="Content\ruiskumitta.png" />
-    <BundleResource Include="Content\saunavihta.png" />
-    <BundleResource Include="Content\soppakauha.png" />
     <BundleResource Include="Content\sukkahousut.png" />
     <BundleResource Include="Content\tilli.png" />
-    <BundleResource Include="Content\xboxohjain.png" />
     <BundleResource Include="Content\aloitusValikko.jpg" />
     <BundleResource Include="Content\pelinTausta.jpg" />
     <BundleResource Include="Content\hefeLogo.png" />
+    <BundleResource Include="Content\hefeLogoTeksti.png" />
+    <BundleResource Include="Content\kinkkuKylma.png" />
+    <BundleResource Include="Content\kinkkuPalanut.png" />
+    <BundleResource Include="Content\kinkkuSopiva.png" />
+    <BundleResource Include="Content\HallOfKinkkuhefe.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

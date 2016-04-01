@@ -12,7 +12,6 @@ public class Kinkkuhefe : PhysicsGame
 	Image valikkoTausta = LoadImage("aloitusValikko"); 								// Ladataan keittiöstä kuva alkuvalikon taustaksi.
 	Image pelinTausta = LoadImage("pelinTausta"); 									// Ladataan todellisen toiminnan aikainen näkymä.
 	Image kinkkuUunissa = LoadImage("kinkkuUunissa");								// Ladataan kuva kinkusta uunissa.
-	Image uuni = LoadImage("uuniIlmanKinkkua");										// Ladataan kuva pelkästä uunista.
 	Image poyta = LoadImage("poyta");												// Ladataan kuva pelkästä pöydästä.
 
 	// HOK = Hall Of Kinkkuhefe
@@ -185,21 +184,21 @@ public class Kinkkuhefe : PhysicsGame
 		ClearGameObjects ();														// Ettei jää nappulat ruudulle
 		ClearTimers ();																// Nollataan ajastimet
 		MessageDisplay.Clear();														// Tyhjennetään tekstiruutu edellisestä viisastelusta.
-
-		Level.Background.Image = uuni; 												// Kuva pelkästä uunista
+	//	lisattyKinkkuunString.Clear();
 
 		MessageDisplay.Clear();														// Tyhjennetään tekstiruutu edellisestä viisastelusta.
 		MultiSelectWindow kinkunPaisto = new MultiSelectWindow("Pitkäänkö ajattelit paistaa?", "Nopeesti vaan ku on jo nälkä!",
 															   "Kai semmonen reipas kolmisen tuntia riittää.", "Jätän yön yli paistuun.");
-		
-		//Level.Background.Image = kinkkuUunissa; 									// Kuva kinkusta uunissa
-		lisattyKinkkuunString.Clear();
 		Add(kinkunPaisto);
+		
+		Level.Background.Image = kinkkuUunissa; 									// Kuva kinkusta uunissa
+
 
 		//HANDLERIT
 		kinkunPaisto.AddItemHandler(0, KylmaKinkku);								// Lyhyt paisto
 		kinkunPaisto.AddItemHandler(1, SopivaKinkku);								// Juuri se oikea aika
 		kinkunPaisto.AddItemHandler(2, PalanutKinkku);								// Nyt menee jo överiks :-D
+
 	}
 
 
@@ -207,23 +206,24 @@ public class Kinkkuhefe : PhysicsGame
 	void KylmaKinkku()
 	{
 
-		Level.Background.Image = kinkkuUunissa; 											// Kuva pöydästä ja näytetään vielä ne objektit, jotka meni kinkkuun
+		ClearGameObjects ();														// Ettei jää nappulat ruudulle
+		Level.Background.Image = poyta; 									// Kuva pöydästä ja näytetään vielä ne objektit, jotka meni kinkkuun
 
 		Label loppuvinoilu = new Label("Mutsiski oli lämpimämpi viime kesänä.");
-		loppuvinoilu.Y = Screen.Top - 200;
+		loppuvinoilu.Y = Screen.Top - 100;
 		loppuvinoilu.TextColor = Color.Blue;
 		Add(loppuvinoilu);
 
-		kinkkuKylma = PhysicsObject.CreateStaticObject(Level.Width * 0.25, Level.Height * 0.175);
+		kinkkuKylma = PhysicsObject.CreateStaticObject(Level.Width * 0.5, Level.Height * 0.35);
 		kinkkuKylma.Image = LoadImage("kinkkuKylma");								// Lisätään kylmäksi jäänyt kinkku
-		kinkkuKylma.Position = new Vector (-260, -20);
+		kinkkuKylma.Position = new Vector (-20, -170);
 		Add (kinkkuKylma, 0);
 
 		Timer aikaa = new Timer();
 		aikaa.Start(1);
 		aikaa.Interval = 5;
+		aikaa.Timeout += MitaLisatty;												// Näytetään pelaajalle mitä hän lisäsi
 
-		MitaLisatty();																// Näytetään pelaajalle mitä hän lisäsi
 
 	}
 
@@ -231,24 +231,24 @@ public class Kinkkuhefe : PhysicsGame
 	// SOPIVASTI PAISTUNUT KINKKU
 	void SopivaKinkku()
 	{
-		
-		Level.Background.Image = kinkkuUunissa; 									// Kuva pöydästä ja näytetään vielä ne objektit, jotka meni kinkkuun
+
+		ClearGameObjects ();														// Ettei jää nappulat ruudulle
+		Level.Background.Image = poyta; 									// Kuva pöydästä ja näytetään vielä ne objektit, jotka meni kinkkuun
 		
 		Label loppuvinoilu = new Label("Täähän näyttää ihan sopivasti paistetulta.");
-		loppuvinoilu.Y = Screen.Top - 200;
+		loppuvinoilu.Y = Screen.Top - 100;
 		loppuvinoilu.TextColor = Color.Gold;
 		Add(loppuvinoilu);
 
-		kinkkuSopiva = PhysicsObject.CreateStaticObject(Level.Width * 0.25, Level.Height * 0.175);
+		kinkkuSopiva = PhysicsObject.CreateStaticObject(Level.Width * 0.5, Level.Height * 0.35);
 		kinkkuSopiva.Image = LoadImage("kinkkuSopiva");								// Lisätään sopivaksi kypsennetty kinkku
-		kinkkuSopiva.Position = new Vector (-260, -20);
+		kinkkuSopiva.Position = new Vector (-20, -170);
 		Add (kinkkuSopiva, 0);
 
 		Timer aikaa = new Timer();
 		aikaa.Start(1);
 		aikaa.Interval = 5;
-
-		MitaLisatty();																// Näytetään pelaajalle mitä hän lisäsi
+		aikaa.Timeout += MitaLisatty;												// Näytetään pelaajalle mitä hän lisäsi
 
 	}
 
@@ -256,24 +256,24 @@ public class Kinkkuhefe : PhysicsGame
 	// AIVAN PALANUT KINKKU
 	void PalanutKinkku()
 	{
-		
-		Level.Background.Image = kinkkuUunissa; 									// Kuva pöydästä ja näytetään vielä ne objektit, jotka meni kinkkuun
+
+		ClearGameObjects ();														// Ettei jää nappulat ruudulle
+		Level.Background.Image = poyta; 											// Kuva pöydästä ja näytetään vielä ne objektit, jotka meni kinkkuun
 		
 		Label loppuvinoilu = new Label("Jos saat samalla mitalla ku tää kinkku niin palat helvetin liekeissä!");
-		loppuvinoilu.Y = Screen.Top - 200;
+		loppuvinoilu.Y = Screen.Top - 100;
 		loppuvinoilu.TextColor = Color.Black;
 		Add(loppuvinoilu);
 
-		kinkkuPalanut = PhysicsObject.CreateStaticObject(Level.Width * 0.25, Level.Height * 0.175);
+		kinkkuPalanut = PhysicsObject.CreateStaticObject(Level.Width * 0.5, Level.Height * 0.35);
 		kinkkuPalanut.Image = LoadImage("kinkkuPalanut");							// Lisätään palanut kinkku
-		kinkkuPalanut.Position = new Vector (-260, -20);
+		kinkkuPalanut.Position = new Vector (-20, -170);
 		Add (kinkkuPalanut, 0);
 
 		Timer aikaa = new Timer();
 		aikaa.Start(1);
 		aikaa.Interval = 5;
-
-		MitaLisatty();																// Näytetään pelaajalle mitä hän lisäsi
+		aikaa.Timeout += MitaLisatty;												// Näytetään pelaajalle mitä hän lisäsi
 
 	}
 

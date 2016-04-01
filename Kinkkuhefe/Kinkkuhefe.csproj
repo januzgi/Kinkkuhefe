@@ -101,7 +101,6 @@
     <BundleResource Include="Content\HallOfKinkkuhefe.png" />
     <BundleResource Include="Content\kinkkuUunissa.png" />
     <BundleResource Include="Content\poyta.png" />
-    <BundleResource Include="Content\uuniIlmanKinkkua.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

@@ -164,15 +164,15 @@ public class Kinkkuhefe : PhysicsGame
 	{
 		
 		// TYHJENNETÄÄN TURHAT
-		//ClearGameObjects ();														// Ettei jää nappulat ruudulle
+		// ClearGameObjects ();														// Ettei jää nappulat ruudulle
 		ClearTimers ();																// Nollataan ajastimet
-		//MessageDisplay.Clear();														// Tyhjennetään tekstiruutu edellisestä viisastelusta.
+		MessageDisplay.Clear();														// Tyhjennetään tekstiruutu edellisestä viisastelusta.
 
 		// LOGO NÄKYVIIN 
 		hallOfKinkkuhefe = PhysicsObject.CreateStaticObject(923, 700);				// Logo alkuvalikon taustalle
 		hallOfKinkkuhefe.Image = LoadImage("HallOfKinkkuhefe");						// Logokuva
 		hallOfKinkkuhefe.Position = new Vector (0, -19);							// Logokuvan sijainti ruudulla
-		Add (hallOfKinkkuhefe, 0);													// Lisätään KH logo 0:een kerrokseen
+		Add (hallOfKinkkuhefe, 1);													// Lisätään KH logo 0:een kerrokseen
 
 		// AVATAAN TULOSLISTA ILMAN ETTÄ SIIHEN VOI LISÄTÄ MITÄÄN
 		HighScoreWindow HallOfKinkku = new HighScoreWindow("", HOK );
@@ -230,9 +230,8 @@ public class Kinkkuhefe : PhysicsGame
 
 		Timer aikaa = new Timer();
 		aikaa.Start(1);
-		aikaa.Interval = 5;
+		aikaa.Interval = 4;
 		aikaa.Timeout += MitaLisatty;												// Näytetään pelaajalle mitä hän lisäsi
-
 
 	}
 
@@ -256,7 +255,7 @@ public class Kinkkuhefe : PhysicsGame
 
 		Timer aikaa = new Timer();
 		aikaa.Start(1);
-		aikaa.Interval = 5;
+		aikaa.Interval = 4;
 		aikaa.Timeout += MitaLisatty;												// Näytetään pelaajalle mitä hän lisäsi
 
 	}
@@ -281,7 +280,7 @@ public class Kinkkuhefe : PhysicsGame
 
 		Timer aikaa = new Timer();
 		aikaa.Start(1);
-		aikaa.Interval = 5;
+		aikaa.Interval = 4;
 		aikaa.Timeout += MitaLisatty;												// Näytetään pelaajalle mitä hän lisäsi
 
 	}
@@ -290,13 +289,11 @@ public class Kinkkuhefe : PhysicsGame
 	// MITÄ PELAAJA LISÄSI KINKUN SEKAAN
 	void MitaLisatty()
 	{
-		
 
 		Timer aikaa = new Timer();
 		aikaa.Start(1);
-		aikaa.Interval = 5;
+		aikaa.Interval = 3;
 		aikaa.Timeout += Pisteita;
-
 
 	}
 

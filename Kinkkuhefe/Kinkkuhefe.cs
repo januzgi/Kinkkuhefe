@@ -25,7 +25,7 @@ public class Kinkkuhefe : PhysicsGame
 
 	// PARI LISTAA
 	List<PhysicsObject> ainekset = new List<PhysicsObject>();						// Thö kinkun & aineksien lista
-	List<PhysicsObject> kinkkuunLisatyt = new List<PhysicsObject>();				// Aineslista kinkkuun lisätyistä
+	// List<PhysicsObject> kinkkuunLisatyt = new List<PhysicsObject>();				// Aineslista kinkkuun lisätyistä
 	List<String> lisattyKinkkuunString = new List<String> (); 						// Kinkkuun lisättyjen tuotteiden lista
 
 	// OBJEKTIT
@@ -207,7 +207,7 @@ public class Kinkkuhefe : PhysicsGame
 	{
 
 		ClearGameObjects ();														// Ettei jää nappulat ruudulle
-		Level.Background.Image = poyta; 									// Kuva pöydästä ja näytetään vielä ne objektit, jotka meni kinkkuun
+		Level.Background.Image = poyta; 											// Kuva pöydästä ja näytetään vielä ne objektit, jotka meni kinkkuun
 
 		Label loppuvinoilu = new Label("Mutsiski oli lämpimämpi viime kesänä.");
 		loppuvinoilu.Y = Screen.Top - 100;
@@ -233,7 +233,7 @@ public class Kinkkuhefe : PhysicsGame
 	{
 
 		ClearGameObjects ();														// Ettei jää nappulat ruudulle
-		Level.Background.Image = poyta; 									// Kuva pöydästä ja näytetään vielä ne objektit, jotka meni kinkkuun
+		Level.Background.Image = poyta; 											// Kuva pöydästä ja näytetään vielä ne objektit, jotka meni kinkkuun
 		
 		Label loppuvinoilu = new Label("Täähän näyttää ihan sopivasti paistetulta.");
 		loppuvinoilu.Y = Screen.Top - 100;

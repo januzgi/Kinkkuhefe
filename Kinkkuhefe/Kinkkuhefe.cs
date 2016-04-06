@@ -25,7 +25,7 @@ public class Kinkkuhefe : PhysicsGame
 
 	// PARI LISTAA
 	List<PhysicsObject> ainekset = new List<PhysicsObject>();						// Thö kinkun & aineksien lista
-	// List<PhysicsObject> kinkkuunLisatyt = new List<PhysicsObject>();				// Aineslista kinkkuun lisätyistä
+	List<PhysicsObject> kinkkuunLisatyt = new List<PhysicsObject>();				// Aineslista kinkkuun lisätyistä
 	List<String> lisattyKinkkuunString = new List<String> (); 						// Kinkkuun lisättyjen tuotteiden lista
 
 	// OBJEKTIT
@@ -64,7 +64,7 @@ public class Kinkkuhefe : PhysicsGame
 		ClearGameObjects ();														// Ettei jää nappulat ruudulle
 		ClearTimers ();																// Nollataan ajastimet
 		MessageDisplay.Clear();														// Tyhjennetään tekstiruutu edellisestä viisastelusta.
-		lisattyKinkkuunString.Clear();												// NOLLATAAN SE MITÄ KINKKUUN EDELLISESSÄ PELISSÄ LISÄTTIIN
+		kinkkuunLisatyt.Clear();													// NOLLATAAN SE MITÄ KINKKUUN EDELLISESSÄ PELISSÄ LISÄTTIIN
 
 		// PÄÄVALIKKO
 		MultiSelectWindow valikko = new MultiSelectWindow("", "JOO JOO KINKKUU TULILLE", "HALL OF KINKKUHEFE", "SYÖN MIELUUMMIN ANANASPIZZAA...");
@@ -228,6 +228,8 @@ public class Kinkkuhefe : PhysicsGame
 		kinkkuKylma.Position = new Vector (-20, -170);
 		Add (kinkkuKylma, 0);
 
+		MitaLisatty ();
+
 		Timer aikaa = new Timer();
 		aikaa.Start(1);
 		aikaa.Interval = 4;
@@ -252,6 +254,8 @@ public class Kinkkuhefe : PhysicsGame
 		kinkkuSopiva.Image = LoadImage("kinkkuSopiva");								// Lisätään sopivaksi kypsennetty kinkku
 		kinkkuSopiva.Position = new Vector (-20, -170);
 		Add (kinkkuSopiva, 0);
+
+		MitaLisatty ();
 
 		Timer aikaa = new Timer();
 		aikaa.Start(1);
@@ -278,6 +282,8 @@ public class Kinkkuhefe : PhysicsGame
 		kinkkuPalanut.Position = new Vector (-20, -170);
 		Add (kinkkuPalanut, 0);
 
+		MitaLisatty ();
+
 		Timer aikaa = new Timer();
 		aikaa.Start(1);
 		aikaa.Interval = 4;
@@ -285,18 +291,25 @@ public class Kinkkuhefe : PhysicsGame
 
 	}
 
-
 	// MITÄ PELAAJA LISÄSI KINKUN SEKAAN
 	void MitaLisatty()
 	{
+		
+		int k = -20;
+		foreach (PhysicsObject lisa in kinkkuunLisatyt) 
+		{
+			lisa.X = -600;
+			lisa.Y = k;
+			k = k - 30;
+			Add (lisa);
+		}
 
 		Timer aikaa = new Timer();
 		aikaa.Start(1);
-		aikaa.Interval = 3;
-		aikaa.Timeout += Pisteita;
+		aikaa.Interval = 2;
+		aikaa.Timeout += HallOfKinkkuhefe;
 
 	}
-
 
 	// KUN HALUAT LISÄTÄ VIELÄ MAUSTEEN
 	void LisaMauste()
@@ -326,7 +339,7 @@ public class Kinkkuhefe : PhysicsGame
 	{
 		MessageDisplay.Clear ();													// Tyhjennetään tekstiruutu edellisestä viisastelusta.
 
-		if (lisattyKinkkuunString.Count >= kuinkaMonta) 
+		if (kinkkuunLisatyt.Count >= kuinkaMonta) 
 		{
 			MultiSelectWindow kinkkuUuniinValikko = new MultiSelectWindow ("Mausteiden puolesta aika laittaa kinkku uuniin.", 
 				"Kinkkuu uuniin!", "Vielä vähän lisää mausteita...", "Pidä kinkkus!");
@@ -354,7 +367,7 @@ public class Kinkkuhefe : PhysicsGame
 		{
 		MultiSelectWindow suolaValikko = new MultiSelectWindow ("Kuinka suolaista meinasit?", "Ripaus sinne tänne", "Kourallinen", "Kilpirauhasen räjäytys"); 
 		elamansuola.Destroy ();
-		lisattyKinkkuunString.Add ("suolaa");
+		kinkkuunLisatyt.Add (elamansuola);
 		suolaValikko.ItemSelected += KommentitAineksista;
 		Add (suolaValikko);
 
@@ -372,7 +385,7 @@ public class Kinkkuhefe : PhysicsGame
 		{
 			MultiSelectWindow jackdanielsValikko = new MultiSelectWindow ("Kinkku uimaan viskiin?", "No ei, ihan ujosti päälle", "Puolet meni jo kokkiin", "Järvisuomi"); 
 			jackdaniels.Destroy ();
-			lisattyKinkkuunString.Add ("Jack Daniels viskiä");
+			kinkkuunLisatyt.Add (jackdaniels);
 			jackdanielsValikko.ItemSelected += KommentitAineksista;
 			Add (jackdanielsValikko);
 
@@ -389,7 +402,7 @@ public class Kinkkuhefe : PhysicsGame
 		{
 			MultiSelectWindow hksininenValikko = new MultiSelectWindow ("Ootsää mies vai hanhi?", "Yks kyrsä ny alkuun", "Metri-Heikki", "Norsunsuoli"); 
 			hksininen.Destroy ();
-			lisattyKinkkuunString.Add ("makkaraa");
+			kinkkuunLisatyt.Add (hksininen);
 			hksininenValikko.ItemSelected += KommentitAineksista;
 			Add (hksininenValikko);
 
@@ -406,7 +419,7 @@ public class Kinkkuhefe : PhysicsGame
 		{
 			MultiSelectWindow kebabkastikeValikko = new MultiSelectWindow ("Ottaako kastike?", "Ei kiitos.", "Vähä koristeeks.", "Mina laitta jo!"); 
 			kebabkastike.Destroy ();
-			lisattyKinkkuunString.Add ("kebab kastiketta");
+			kinkkuunLisatyt.Add (kebabkastike);
 			kebabkastikeValikko.ItemSelected += KommentitAineksista;
 			Add (kebabkastikeValikko);
 
@@ -423,7 +436,7 @@ public class Kinkkuhefe : PhysicsGame
 		{
 			MultiSelectWindow lanttuValikko = new MultiSelectWindow ("Ethän sä tästä voi tykätä?", "Sano HYI!", "Niinku mämmi, tää toimii.", "Lanttu on mun isän nimi."); 
 			lanttu.Destroy ();
-			lisattyKinkkuunString.Add ("lanttua");
+			kinkkuunLisatyt.Add (lanttu);
 			lanttuValikko.ItemSelected += KommentitAineksista;
 			Add (lanttuValikko);
 
@@ -440,7 +453,7 @@ public class Kinkkuhefe : PhysicsGame
 		{
 			MultiSelectWindow kossuValikko = new MultiSelectWindow ("Oletkos viinamäen miehiä?", "Juon vain siidereitä.", "Huomenna vapaapäivä...", "Keitän aamupuuron kossuun."); 
 			kossu.Destroy ();
-			lisattyKinkkuunString.Add ("kosanderia");
+			kinkkuunLisatyt.Add (kossu);
 			kossuValikko.ItemSelected += KommentitAineksista;
 			Add (kossuValikko);
 
@@ -457,7 +470,7 @@ public class Kinkkuhefe : PhysicsGame
 		{
 			MultiSelectWindow mandariiniValikko = new MultiSelectWindow ("Taidat tietää mitä teet?", "En syö hedelmiä paitsi kinkun kanssa.", "Haistellaan.", "MANDARIINIGIINALAISTA SIGAA d:-D"); 
 			mandariini.Destroy ();
-			lisattyKinkkuunString.Add ("mandariini");
+			kinkkuunLisatyt.Add (mandariini);
 			mandariiniValikko.ItemSelected += KommentitAineksista;
 			Add (mandariiniValikko);
 
@@ -474,7 +487,7 @@ public class Kinkkuhefe : PhysicsGame
 		{
 			MultiSelectWindow marsipaaniValikko = new MultiSelectWindow ("Haluatko meille töihin?", "En. Ujutetaan vähä tohon päälle.", "Vihdoin sokerihumalaan.", "Marsi-MADAFAKIN-PAANIA!!!1"); 
 			marsipaani.Destroy ();
-			lisattyKinkkuunString.Add ("marsipaani");
+			kinkkuunLisatyt.Add (marsipaani);
 			marsipaaniValikko.ItemSelected += KommentitAineksista;
 			Add (marsipaaniValikko);
 
@@ -491,7 +504,7 @@ public class Kinkkuhefe : PhysicsGame
 		{
 			MultiSelectWindow rakuunaValikko = new MultiSelectWindow ("Kääri tää sätkään, päriC!", "Voi vilperi nyt poltellaan!", "Todellista mausteiden aatelia.", "Rakuuna-harppuuna-kanuuna"); 
 			rakuuna.Destroy ();
-			lisattyKinkkuunString.Add ("rakuuna");
+			kinkkuunLisatyt.Add (rakuuna);
 			rakuunaValikko.ItemSelected += KommentitAineksista;
 			Add (rakuunaValikko);
 
@@ -508,7 +521,7 @@ public class Kinkkuhefe : PhysicsGame
 		{
 			MultiSelectWindow msmjauheValikko = new MultiSelectWindow ("MSM jauhe on hyväksi kynsille.", "Olen puutarhuri.", "Silti sisälläni on aina ollut Megan Fox.", "Tyra Banxx jää mun kynsille toiseks."); 
 			msmjauhe.Destroy ();
-			lisattyKinkkuunString.Add ("msmjauhe");
+			kinkkuunLisatyt.Add (msmjauhe);
 			msmjauheValikko.ItemSelected += KommentitAineksista;
 			Add (msmjauheValikko);
 
@@ -525,7 +538,7 @@ public class Kinkkuhefe : PhysicsGame
 		{
 			MultiSelectWindow mustaherukkaValikko = new MultiSelectWindow ("Näistä saisi myös viiniä.", "Jäbä koittaa kusettaa!", "Nyt tehdään nevöföget-kinkku.", "On rasismia aina syödä vaaleaa kinkkua."); 
 			mustaherukka.Destroy ();
-			lisattyKinkkuunString.Add ("mustaherukka");
+			kinkkuunLisatyt.Add (mustaherukka);
 			mustaherukkaValikko.ItemSelected += KommentitAineksista;
 			Add (mustaherukkaValikko);
 
@@ -542,7 +555,7 @@ public class Kinkkuhefe : PhysicsGame
 		{
 			MultiSelectWindow mustakitaturskaValikko = new MultiSelectWindow ("Jos käyt kalassa tiedät mikä on paskahauki.", "Jep, ja tämä on vielä syvemmältä.", "Täähän on tonnikala!", "Tämä on sitä kuuluisaa Jäämeren kaviaaria."); 
 			mustakitaturska.Destroy ();
-			lisattyKinkkuunString.Add ("mustakitaturska");
+			kinkkuunLisatyt.Add (mustakitaturska);
 			mustakitaturskaValikko.ItemSelected += KommentitAineksista;
 			Add (mustakitaturskaValikko);
 
@@ -559,7 +572,7 @@ public class Kinkkuhefe : PhysicsGame
 		{
 			MultiSelectWindow mustapippuriValikko = new MultiSelectWindow ("Pimeimmän Afrikan mustinta pippuria.", "No offense Afrikka, mutta pidän vain vaahtokarkeista.", "Elämä on yhtä tyhjän kanssa ilman pippuria.", "MUSTABEPEE!!!"); 
 			mustapippuri.Destroy ();
-			lisattyKinkkuunString.Add ("mustapippuri");
+			kinkkuunLisatyt.Add (mustapippuri);
 			mustapippuriValikko.ItemSelected += KommentitAineksista;
 			Add (mustapippuriValikko);
 
@@ -576,7 +589,7 @@ public class Kinkkuhefe : PhysicsGame
 		{
 			MultiSelectWindow sukkahousutValikko = new MultiSelectWindow ("Taitaa olla vaimokkeen sukkahousut jäänyt pöydälle...", "Laitanpa nämä jalkaan.", "Pysyy ainakin kinkku mehevänä!"); 
 			sukkahousut.Destroy ();
-			lisattyKinkkuunString.Add ("sukkahousut");
+			kinkkuunLisatyt.Add (sukkahousut);
 			sukkahousutValikko.ItemSelected += KommentitAineksista;
 			Add (sukkahousutValikko);
 
@@ -593,7 +606,7 @@ public class Kinkkuhefe : PhysicsGame
 		{
 			MultiSelectWindow tilliValikko = new MultiSelectWindow ("Tämä kasvi tuo muistoja mieleen nuoruudesta...", "Kun polttelimme salaa kasvihuoneen takana.", "Voisihan tätä vähän laittaa... Nenään.", "Silloin tehtiin tilliä kinkulla!!!"); 
 			tilli.Destroy ();
-			lisattyKinkkuunString.Add ("tilli");
+			kinkkuunLisatyt.Add (tilli);
 			tilliValikko.ItemSelected += KommentitAineksista;
 			Add (tilliValikko);
 

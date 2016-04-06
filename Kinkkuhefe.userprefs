@@ -1,16 +1,9 @@
-﻿<Properties MonoDevelop.MonoMac.LastXamMacNagTime="6.4.2016 13:20:37">
+﻿<Properties MonoDevelop.MonoMac.LastXamMacNagTime="6.4.2016 14:01:53">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Kinkkuhefe/Kinkkuhefe.cs">
     <Files>
-      <File FileName="Kinkkuhefe/Kinkkuhefe.cs" Line="206" Column="20" />
+      <File FileName="Kinkkuhefe/Kinkkuhefe.cs" Line="159" Column="55" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State name="__root__">
-          <Node />
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />

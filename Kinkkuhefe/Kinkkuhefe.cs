@@ -135,12 +135,26 @@ public class Kinkkuhefe : PhysicsGame
 
 	}
 
+	// PISTEIDEN SYÖTTÄMINEN PELIN PÄÄTYTTYÄ
+	void Pisteita()
+	{
+		
+		HighScoreWindow topIkkuna = new HighScoreWindow("" ,"Onneksi olkoon, pääsit listalle pisteillä %p! Syötä nimesi:", HOK, pisteidenLasku );
+		topIkkuna.Closed += TallennaPisteet;
+		Add( topIkkuna );
+
+	}
 
 	// PISTEIDEN TALLENNUS HALL OF KINKKUHEFEÄ VARTEN
 	void TallennaPisteet(Window sender)
 	{
 		
 		DataStorage.Save<ScoreList>(HOK, "pojot.xml");
+
+		Timer aikaa = new Timer();
+		aikaa.Start(1);
+		aikaa.Interval = 2;
+		aikaa.Timeout += HallOfKinkkuhefe;
 
 	}
 
@@ -150,9 +164,9 @@ public class Kinkkuhefe : PhysicsGame
 	{
 		
 		// TYHJENNETÄÄN TURHAT
-		ClearGameObjects ();														// Ettei jää nappulat ruudulle
+		//ClearGameObjects ();														// Ettei jää nappulat ruudulle
 		ClearTimers ();																// Nollataan ajastimet
-		MessageDisplay.Clear();														// Tyhjennetään tekstiruutu edellisestä viisastelusta.
+		//MessageDisplay.Clear();														// Tyhjennetään tekstiruutu edellisestä viisastelusta.
 
 		// LOGO NÄKYVIIN 
 		hallOfKinkkuhefe = PhysicsObject.CreateStaticObject(923, 700);				// Logo alkuvalikon taustalle
@@ -160,18 +174,13 @@ public class Kinkkuhefe : PhysicsGame
 		hallOfKinkkuhefe.Position = new Vector (0, -19);							// Logokuvan sijainti ruudulla
 		Add (hallOfKinkkuhefe, 0);													// Lisätään KH logo 0:een kerrokseen
 
-		HighScoreWindow hallOfKinkku = new HighScoreWindow("", "Pääsit kinkunpaiston all-staareihin pistein %p! Anna nickisi:", HOK, pisteidenLasku);
-		hallOfKinkku.NameInputWindow.Message.Text = "Onneksi olkoon! Sait {0:0} pistettä. Anna nimesi";
-		hallOfKinkku.List.ScoreFormat = "{0:0}";
-		hallOfKinkku.Closed += TallennaPisteet;
-		Add(hallOfKinkku);
-		hallOfKinkku.Closed += delegate (Window sender) 
+		// AVATAAN TULOSLISTA ILMAN ETTÄ SIIHEN VOI LISÄTÄ MITÄÄN
+		HighScoreWindow HallOfKinkku = new HighScoreWindow("", HOK );
+		HallOfKinkku.Closed += delegate (Window sender) 
 		{
 			Valikko();
 		};
-
-		// VALIKKOON MENEMINEN
-		Keyboard.Listen (Key.Escape, ButtonState.Pressed, Valikko, "Avaa valikko");
+		Add( HallOfKinkku );
 
 	}
 		
@@ -286,7 +295,7 @@ public class Kinkkuhefe : PhysicsGame
 		Timer aikaa = new Timer();
 		aikaa.Start(1);
 		aikaa.Interval = 5;
-		aikaa.Timeout += HallOfKinkkuhefe;
+		aikaa.Timeout += Pisteita;
 
 
 	}

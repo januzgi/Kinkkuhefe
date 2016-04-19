@@ -7,6 +7,12 @@ using Jypeli.Widgets;
 
 public class Kinkkuhefe : PhysicsGame
 {
+	/// @author Jani Suoranta, jatasuor 
+	/// @author Otto Jahnukainen, otosjahn
+	/// @version 19.04.2016
+	/// <summary>
+	/// Vallankumouksellinen kinkunpaistosimulaattori
+	/// </summary>
 	
 	// TAUSTAKUVAT
 	Image valikkoTausta = LoadImage("aloitusValikko"); 								// Ladataan keittiöstä kuva alkuvalikon taustaksi.
@@ -27,6 +33,7 @@ public class Kinkkuhefe : PhysicsGame
 	List<PhysicsObject> ainekset = new List<PhysicsObject>();						// Thö kinkun & aineksien lista
 	List<PhysicsObject> kinkkuunLisatyt = new List<PhysicsObject>();				// Aineslista kinkkuun lisätyistä
 	List<String> lisattyKinkkuunString = new List<String> (); 						// Kinkkuun lisättyjen tuotteiden lista
+
 
 	// OBJEKTIT
 	PhysicsObject kinkku;					// 1.
@@ -54,12 +61,42 @@ public class Kinkkuhefe : PhysicsGame
 	PhysicsObject kinkkuKylma;				// Kylmäks jäänyt kinkku
 	PhysicsObject kinkkuSopiva;				// Sopivaksi paistunut kinkku
 	PhysicsObject kinkkuPalanut; 			// Palaneeksi asti uunissa ollut kinkku
+		
+
+	/// <summary>
+	/// Pääohjelma, jossa valikkoa kutsutaan pienellä viiveellä
+	/// </summary>
+	public override void Begin ()
+	{
+		// YLEISET IKKUNAN ASETUKSET & MUUT LATAAMISET
+		SetWindowSize(1920, 1080);													// Ikkunan koko sama kuin taustakuvien resoluutio
+		IsFullScreen = true; 														// Peli asetetaan kokonäytölle.	
+		Camera.ZoomToLevel(100);													// Koko tausta näkyvillä.
+		Mouse.IsCursorVisible = true; 												// Hiiri näkyviin.
+		SmoothTextures = false;														// Reunojen pehmennys pois käytöstä.
+		Level.Background.Image = valikkoTausta; 									// Ladataan pelistä tausta
+		HOK = DataStorage.TryLoad<ScoreList>(HOK, "pojot.xml" );					// Hall of fame listaukselle data
+
+		// LOGO NÄKYVIIN 
+		logo = PhysicsObject.CreateStaticObject(923, 538);							// Logo alkuvalikon taustalle
+		logo.Image = LoadImage("hefeLogo");											// Logokuva
+		logo.Position = new Vector (0, -100);										// Logokuvan sijainti ruudulla
+		Add (logo, 0);																// Lisätään KH logo 0:een kerrokseen
+
+		// ALOITUKSEN AJASTIN
+		Timer aikaa = new Timer();
+		aikaa.Start(1);
+		aikaa.Interval = 2.5;
+		aikaa.Timeout += Valikko;
+	}
 
 
-	// LUODAAN ESC:illä AVATTAVA VALIKKO 
+	/// <summary>
+	/// Luodaan ESC:illä avattava valikko
+	/// </summary>
+	/// <param name=""></param>
 	void Valikko()
 	{
-		
 		// TYHJENNETÄÄN TURHAT & NOLLATAAN
 		ClearGameObjects ();														// Ettei jää nappulat ruudulle
 		ClearTimers ();																// Nollataan ajastimet
@@ -82,42 +119,14 @@ public class Kinkkuhefe : PhysicsGame
 		valikko.AddItemHandler(2, Exit);											// Poistu pelistä, kun nappia kaksi painetaan
 		valikko.AddItemHandler(0, PeliKayntiin);									// Aloittaa pelin kun ylintä nappia painetaan
 		valikko.AddItemHandler(1, HallOfKinkkuhefe);								// Näytetään top-score listaus 
-
 	}
 		
 
-	// PÄÄOHJELMA
-	public override void Begin ()
-	{
-		
-		// YLEISET IKKUNAN ASETUKSET & MUUT LATAAMISET
-		SetWindowSize(1920, 1080);													// Ikkunan koko sama kuin taustakuvien resoluutio
-		IsFullScreen = true; 														// Peli asetetaan kokonäytölle.	
-		Camera.ZoomToLevel(100);													// Koko tausta näkyvillä.
-		Mouse.IsCursorVisible = true; 												// Hiiri näkyviin.
-		SmoothTextures = false;														// Reunojen pehmennys pois käytöstä.
-		Level.Background.Image = valikkoTausta; 									// Ladataan pelistä tausta
-		HOK = DataStorage.TryLoad<ScoreList>(HOK, "pojot.xml" );					// Hall of fame listaukselle data
-
-		// LOGO NÄKYVIIN 
-		logo = PhysicsObject.CreateStaticObject(923, 538);							// Logo alkuvalikon taustalle
-		logo.Image = LoadImage("hefeLogo");											// Logokuva
-		logo.Position = new Vector (0, -100);										// Logokuvan sijainti ruudulla
-		Add (logo, 0);																// Lisätään KH logo 0:een kerrokseen
-
-		// ALOITUKSEN AJASTIN
-		Timer aikaa = new Timer();
-		aikaa.Start(1);
-		aikaa.Interval = 2.5;
-		aikaa.Timeout += Valikko;
-
-	}
-		
-
-	// ITSE PELIIN
+	/// <summary>
+	/// Pelin käynnistäminen uudella taustalla
+	/// </summary>
 	void PeliKayntiin()
 	{
-		
 		// TYHJENNETÄÄN TURHAT
 		ClearGameObjects ();														// Ettei jää nappulat ruudulle
 		ClearTimers ();																// Nollataan ajastimet
@@ -132,37 +141,38 @@ public class Kinkkuhefe : PhysicsGame
 
 		// VALIKKOON MENEMINEN
 		Keyboard.Listen (Key.Escape, ButtonState.Pressed, Valikko, "Avaa valikko");
-
 	}
 
-	// PISTEIDEN SYÖTTÄMINEN PELIN PÄÄTYTTYÄ
+
+	/// <summary>
+	/// Pisteiden tallennus
+	/// </summary>
 	void Pisteita()
 	{
-		
 		HighScoreWindow topIkkuna = new HighScoreWindow("" ,"Onneksi olkoon, pääsit listalle pisteillä %p! Syötä nimesi:", HOK, pisteidenLasku );
 		topIkkuna.Closed += TallennaPisteet;
 		Add( topIkkuna );
-
 	}
 
-	// PISTEIDEN TALLENNUS HALL OF KINKKUHEFEÄ VARTEN
+	/// <summary>
+	/// Pisteiden tallennus Hall of Kinkkuhefeä varten
+	/// </summary>
 	void TallennaPisteet(Window sender)
 	{
-		
 		DataStorage.Save<ScoreList>(HOK, "pojot.xml");
 
 		Timer aikaa = new Timer();
 		aikaa.Start(1);
 		aikaa.Interval = 2;
 		aikaa.Timeout += HallOfKinkkuhefe;
-
 	}
 
 
-	// HIGHSCORE TAULUKKO
+	/// <summary>
+	/// Highscore taulukko
+	/// </summary>
 	void HallOfKinkkuhefe()
 	{
-		
 		// TYHJENNETÄÄN TURHAT
 		// ClearGameObjects ();														// Ettei jää nappulat ruudulle
 		ClearTimers ();																// Nollataan ajastimet
@@ -172,28 +182,29 @@ public class Kinkkuhefe : PhysicsGame
 		hallOfKinkkuhefe = PhysicsObject.CreateStaticObject(923, 700);				// Logo alkuvalikon taustalle
 		hallOfKinkkuhefe.Image = LoadImage("HallOfKinkkuhefe");						// Logokuva
 		hallOfKinkkuhefe.Position = new Vector (0, -19);							// Logokuvan sijainti ruudulla
-		Add (hallOfKinkkuhefe, 1);													// Lisätään KH logo 0:een kerrokseen
+		Add (hallOfKinkkuhefe, 0);													// Lisätään KH logo 0:een kerrokseen
 
 		// AVATAAN TULOSLISTA ILMAN ETTÄ SIIHEN VOI LISÄTÄ MITÄÄN
 		HighScoreWindow HallOfKinkku = new HighScoreWindow("", HOK );
 		HallOfKinkku.Closed += delegate (Window sender) 
 		{
-			Valikko();
+			Valikko ();
 		};
-		Add( HallOfKinkku );
 
+		Add(HallOfKinkku);
 	}
 		
 
-	// KINKKUU UUNIIN
+	/// <summary>
+	/// Kinkku uuniin
+	/// </summary>
 	void KinkkuUuniin()
 	{
-		
 		// TYHJENNETÄÄN TURHAT
 		ClearGameObjects ();														// Ettei jää nappulat ruudulle
 		ClearTimers ();																// Nollataan ajastimet
 		MessageDisplay.Clear();														// Tyhjennetään tekstiruutu edellisestä viisastelusta.
-	//	lisattyKinkkuunString.Clear();
+		lisattyKinkkuunString.Clear();												// Lista tyhjäksi seuraavaa peliä varten
 
 		MessageDisplay.Clear();														// Tyhjennetään tekstiruutu edellisestä viisastelusta.
 		MultiSelectWindow kinkunPaisto = new MultiSelectWindow("Pitkäänkö ajattelit paistaa?", "Nopeesti vaan ku on jo nälkä!",
@@ -207,14 +218,14 @@ public class Kinkkuhefe : PhysicsGame
 		kinkunPaisto.AddItemHandler(0, KylmaKinkku);								// Lyhyt paisto
 		kinkunPaisto.AddItemHandler(1, SopivaKinkku);								// Juuri se oikea aika
 		kinkunPaisto.AddItemHandler(2, PalanutKinkku);								// Nyt menee jo överiks :-D
-
 	}
 
 
-	// KYLMÄKSI JÄÄNYT KINKKU
+	/// <summary>
+	/// Kylmäksi jäänyt kinkku
+	/// </summary>
 	void KylmaKinkku()
 	{
-
 		ClearGameObjects ();														// Ettei jää nappulat ruudulle
 		Level.Background.Image = poyta; 											// Kuva pöydästä ja näytetään vielä ne objektit, jotka meni kinkkuun
 
@@ -223,25 +234,25 @@ public class Kinkkuhefe : PhysicsGame
 		loppuvinoilu.TextColor = Color.Blue;
 		Add(loppuvinoilu);
 
+		MitaLisatty ();
+
 		kinkkuKylma = PhysicsObject.CreateStaticObject(Level.Width * 0.5, Level.Height * 0.35);
 		kinkkuKylma.Image = LoadImage("kinkkuKylma");								// Lisätään kylmäksi jäänyt kinkku
 		kinkkuKylma.Position = new Vector (-20, -170);
 		Add (kinkkuKylma, 0);
 
-		MitaLisatty ();
-
 		Timer aikaa = new Timer();
 		aikaa.Start(1);
 		aikaa.Interval = 4;
 		aikaa.Timeout += MitaLisatty;												// Näytetään pelaajalle mitä hän lisäsi
-
 	}
 
 
-	// SOPIVASTI PAISTUNUT KINKKU
+	/// <summary>
+	/// Sopivasti paistunut kinkku
+	/// </summary>
 	void SopivaKinkku()
 	{
-
 		ClearGameObjects ();														// Ettei jää nappulat ruudulle
 		Level.Background.Image = poyta; 											// Kuva pöydästä ja näytetään vielä ne objektit, jotka meni kinkkuun
 		
@@ -250,25 +261,25 @@ public class Kinkkuhefe : PhysicsGame
 		loppuvinoilu.TextColor = Color.Gold;
 		Add(loppuvinoilu);
 
+		MitaLisatty ();
+
 		kinkkuSopiva = PhysicsObject.CreateStaticObject(Level.Width * 0.5, Level.Height * 0.35);
 		kinkkuSopiva.Image = LoadImage("kinkkuSopiva");								// Lisätään sopivaksi kypsennetty kinkku
 		kinkkuSopiva.Position = new Vector (-20, -170);
 		Add (kinkkuSopiva, 0);
-
-		MitaLisatty ();
-
+	
 		Timer aikaa = new Timer();
 		aikaa.Start(1);
 		aikaa.Interval = 4;
 		aikaa.Timeout += MitaLisatty;												// Näytetään pelaajalle mitä hän lisäsi
-
 	}
 
 
-	// AIVAN PALANUT KINKKU
+	/// <summary>
+	/// Aivan palanut kinkku
+	/// </summary>
 	void PalanutKinkku()
 	{
-
 		ClearGameObjects ();														// Ettei jää nappulat ruudulle
 		Level.Background.Image = poyta; 											// Kuva pöydästä ja näytetään vielä ne objektit, jotka meni kinkkuun
 		
@@ -277,44 +288,97 @@ public class Kinkkuhefe : PhysicsGame
 		loppuvinoilu.TextColor = Color.Black;
 		Add(loppuvinoilu);
 
+		MitaLisatty ();
+
 		kinkkuPalanut = PhysicsObject.CreateStaticObject(Level.Width * 0.5, Level.Height * 0.35);
 		kinkkuPalanut.Image = LoadImage("kinkkuPalanut");							// Lisätään palanut kinkku
 		kinkkuPalanut.Position = new Vector (-20, -170);
 		Add (kinkkuPalanut, 0);
 
-		MitaLisatty ();
-
 		Timer aikaa = new Timer();
 		aikaa.Start(1);
 		aikaa.Interval = 4;
 		aikaa.Timeout += MitaLisatty;												// Näytetään pelaajalle mitä hän lisäsi
-
 	}
 
-	// MITÄ PELAAJA LISÄSI KINKUN SEKAAN
+	/// <summary>
+	/// Mitä pelaaja lisäsi kinkun sekaan
+	/// </summary>
 	void MitaLisatty()
 	{
-		
 		int k = -20;
+		int apu = 0;
 		foreach (PhysicsObject lisa in kinkkuunLisatyt) 
 		{
-			lisa.X = -600;
-			lisa.Y = k;
-			k = k - 30;
+			lisa.X = -500;
 			Add (lisa);
 		}
 
+		if (pisteidenLasku <= 4) 
+		{
+			if (lisattyKinkkuunString.Contains ("sukkahousut")) 
+			{
+				Label tekstikentta = new Label (500, 100, "villahousut on tillilihamauste ei kinkun");
+				tekstikentta.Color = Color.White;
+				tekstikentta.Y = -380;
+				Add (tekstikentta);
+			} else {
+				Label tekstikentta = new Label (400, 100, "No kinkku ainakin maistuu \n mut vaatii kyl sinappii");
+				tekstikentta.Color = Color.White;
+				tekstikentta.Y = -380;
+				Add (tekstikentta);
+			}
+		} else if (pisteidenLasku >= 5 && pisteidenLasku <= 6) 
+		{
+			Label tekstikentta = new Label (700, 100, "Jes ihan niinkun mummon tekmää aikoinaan");
+			tekstikentta.Color = Color.White;
+			tekstikentta.Y = -380;
+			Add (tekstikentta);
+		} else if (pisteidenLasku >= 7) 
+		{
+			if (lisattyKinkkuunString.Contains ("Jack Daniels viskiä")) 
+			{
+				Label tekstikentta = new Label (700, 100, "jaa ettei ois vaan lotrattu danielssin kanssa :/");
+				tekstikentta.Color = Color.White;
+				tekstikentta.Y = -380;
+				Add (tekstikentta);
+			} else {
+				Label tekstikentta = new Label (700, 100, "no on aika eksoottista ja kinkkukin vois maistuu enemmän");
+				tekstikentta.Color = Color.White;
+				tekstikentta.Y = -380;
+				Add (tekstikentta);
+			}
+		}
+			
 		Timer aikaa = new Timer();
 		aikaa.Start(1);
-		aikaa.Interval = 2;
-		aikaa.Timeout += HallOfKinkkuhefe;
-
+		aikaa.Interval = 5;
+		aikaa.Timeout += AddToKinkkuFame;
 	}
 
-	// KUN HALUAT LISÄTÄ VIELÄ MAUSTEEN
+
+	/// <summary>
+	/// Pelaajan päästessä toplistalle
+	/// </summary>
+	void AddToKinkkuFame() 
+	{
+		HighScoreWindow hallOfKinkku = new HighScoreWindow("", "Pääsit kinkunpaiston all-staareihin pistein %p! Anna nickisi:", HOK, pisteidenLasku);
+		hallOfKinkku.NameInputWindow.Message.Text = "Onneksi olkoon! Sait {0:0} pistettä. Anna nimesi";
+		hallOfKinkku.List.ScoreFormat = "{0:0}";
+		hallOfKinkku.Closed += TallennaPisteet;
+		Add(hallOfKinkku);
+
+		hallOfKinkku.Closed += delegate (Window sender) 
+		{
+			Valikko();
+		};
+	}
+
+	/// <summary>
+	/// Kun pelaaja haluaa vielä lisätä mausteen
+	/// </summary>
 	void LisaMauste()
 	{
-		
 		if (kuinkaMonta == 4) 
 		{
 			MessageDisplay.Clear ();
@@ -324,17 +388,15 @@ public class Kinkkuhefe : PhysicsGame
 			aikaa.Start(1);
 			aikaa.Interval = 2;
 			aikaa.Timeout += KinkkuUuniin;
-		}
-
-		else 
-		{
+		} else {
 			kuinkaMonta++;
 		}
-
 	}
 
 
-	// ONKO KINKUSSA TARPEEKS AINEKSIA
+	/// <summary>
+	/// Onko kinkussa tarpeeksi aineksia
+	/// </summary>
 	void OnkoJoValmista()
 	{
 		MessageDisplay.Clear ();													// Tyhjennetään tekstiruutu edellisestä viisastelusta.
@@ -349,16 +411,15 @@ public class Kinkkuhefe : PhysicsGame
 			kinkkuUuniinValikko.AddItemHandler(0, KinkkuUuniin);					// Kinkku menee uuniin paistumaan
 			kinkkuUuniinValikko.AddItemHandler(1, LisaMauste);						// Jatketaan maustamista
 			kinkkuUuniinValikko.AddItemHandler(2, Valikko);							// Poistuu pelistä alkuun
-		}
-
-		else 
-		{
+		} else {
 			KuunteleLiiketta ();
 		}
 	}
 
 
-	// AINEKSIEN LISÄÄMINEN KINKKUUN
+	/// <summary>
+	/// Aineksien lisääminen kinkkuun
+	/// </summary>
 	void OnkoKinkunPaalla()
 	{
 		MessageDisplay.Clear ();													// Tyhjennetään tekstiruutu edellisestä viisastelusta.
@@ -375,8 +436,7 @@ public class Kinkkuhefe : PhysicsGame
 		if (i == 0) 
 			{
 				pisteidenLasku = pisteidenLasku + 1;
-			} 
-			else if (i == 1) {
+			} else if (i == 1) {
 				pisteidenLasku += 3;
 			}
 		}
@@ -392,8 +452,7 @@ public class Kinkkuhefe : PhysicsGame
 			int i = jackdanielsValikko.SelectedIndex;
 			if (i == 0) {
 				pisteidenLasku = pisteidenLasku + 1;
-			} 
-			else if (i == 2) {
+			} else if (i == 2) {
 				pisteidenLasku += 3;
 			}
 		}
@@ -409,8 +468,7 @@ public class Kinkkuhefe : PhysicsGame
 			int i = hksininenValikko.SelectedIndex;
 			if (i == 0) {
 				pisteidenLasku = pisteidenLasku + 1;
-			} 
-			else if (i == 1) {
+			} else if (i == 1) {
 				pisteidenLasku += 3;
 			}
 		}
@@ -426,8 +484,7 @@ public class Kinkkuhefe : PhysicsGame
 			int i = kebabkastikeValikko.SelectedIndex;
 			if (i == 1) {
 				pisteidenLasku = pisteidenLasku + 1;
-			} 
-			else if (i == 2) {
+			} else if (i == 2) {
 				pisteidenLasku += 3;
 			}
 		}
@@ -443,8 +500,7 @@ public class Kinkkuhefe : PhysicsGame
 			int i = lanttuValikko.SelectedIndex;
 			if (i == 2) {
 				pisteidenLasku = pisteidenLasku + 3;
-			} 
-			else if (i == 0) {
+			} else if (i == 0) {
 				pisteidenLasku += 3;
 			}
 		}
@@ -460,8 +516,7 @@ public class Kinkkuhefe : PhysicsGame
 			int i = kossuValikko.SelectedIndex;
 			if (i == 2) {
 				pisteidenLasku = pisteidenLasku + 1;
-			} 
-			else if (i == 1) {
+			} else if (i == 1) {
 				pisteidenLasku += 3;
 			}
 		}
@@ -477,8 +532,7 @@ public class Kinkkuhefe : PhysicsGame
 			int i = mandariiniValikko.SelectedIndex;
 			if (i == 1) {
 				pisteidenLasku = pisteidenLasku + 1;
-			} 
-			else if (i == 2) {
+			} else if (i == 2) {
 				pisteidenLasku += 3;
 			}
 		}
@@ -494,8 +548,7 @@ public class Kinkkuhefe : PhysicsGame
 			int i = marsipaaniValikko.SelectedIndex;
 			if (i == 1) {
 				pisteidenLasku = pisteidenLasku + 1;
-			} 
-			else if (i == 0) {
+			} else if (i == 0) {
 				pisteidenLasku += 3;
 			}
 		}
@@ -511,8 +564,7 @@ public class Kinkkuhefe : PhysicsGame
 			int i = rakuunaValikko.SelectedIndex;
 			if (i == 2) {
 				pisteidenLasku = pisteidenLasku + 1;
-			} 
-			else if (i == 1) {
+			} else if (i == 1) {
 				pisteidenLasku += 3;
 			}
 		}
@@ -528,8 +580,7 @@ public class Kinkkuhefe : PhysicsGame
 			int i = msmjauheValikko.SelectedIndex;
 			if (i == 1) {
 				pisteidenLasku = pisteidenLasku + 1;
-			} 
-			else if (i == 2) {
+			} else if (i == 2) {
 				pisteidenLasku += 3;
 			}
 		}
@@ -545,8 +596,7 @@ public class Kinkkuhefe : PhysicsGame
 			int i = mustaherukkaValikko.SelectedIndex;
 			if (i == 1) {
 				pisteidenLasku = pisteidenLasku + 1;
-			} 
-			else if (i == 2) {
+			} else if (i == 2) {
 				pisteidenLasku += 3;
 			}
 		}
@@ -562,8 +612,7 @@ public class Kinkkuhefe : PhysicsGame
 			int i = mustakitaturskaValikko.SelectedIndex;
 			if (i == 1) {
 				pisteidenLasku = pisteidenLasku + 1;
-			} 
-			else if (i == 0) {
+			} else if (i == 0) {
 				pisteidenLasku += 3;
 			}
 		}
@@ -579,8 +628,7 @@ public class Kinkkuhefe : PhysicsGame
 			int i = mustapippuriValikko.SelectedIndex;
 			if (i == 1) {
 				pisteidenLasku = pisteidenLasku + 1;
-			} 
-			else if (i == 2) {
+			} else if (i == 2) {
 				pisteidenLasku += 3;
 			}
 		}
@@ -596,8 +644,7 @@ public class Kinkkuhefe : PhysicsGame
 			int i = sukkahousutValikko.SelectedIndex;
 			if (i == 1) {
 				pisteidenLasku = pisteidenLasku + 1;
-			} 
-			else if (i == 0) {
+			} else if (i == 0) {
 				pisteidenLasku += 3;
 			}
 		}
@@ -613,19 +660,19 @@ public class Kinkkuhefe : PhysicsGame
 			int i = tilliValikko.SelectedIndex;
 			if (i == 1) {
 				pisteidenLasku = pisteidenLasku + 1;
-			} 
-			else if (i == 2) {
+			} else if (i == 2) {
 				pisteidenLasku += 3;
 			}
 		}
-
 	}
 		
 
-	// KOMMENTTI AINEKSISTA KUN NE LISÄTÄÄN
+	/// <summary>
+	/// Kommentti aineksista kun ne lisätään
+	/// </summary>
+	/// <param name="i">Monesko kohta valittiin taulukosta eli kuinka hullusti maustoi, sen mukaan kommenttia</param>
 	void KommentitAineksista(int i)
 	{
-		
 		switch (i)
 		{
 		case 0 :
@@ -641,14 +688,13 @@ public class Kinkkuhefe : PhysicsGame
 			MessageDisplay.MaxMessageCount = 0;
 			break;
 		}
-
 	}
 
-
-	// HIIREN KUUNTELU ELI MITÄ TAPAHTUU KUN VASEN HIIRI ON PAINETTU POHJAAN
+	/// <summary>
+	/// HIIREN KUUNTELU ELI MITÄ TAPAHTUU KUN VASEN HIIRI ON PAINETTU POHJAAN
+	/// </summary>
 	void KuunteleLiiketta()
 	{   
-		
 		MessageDisplay.Clear();														// Tyhjennetään tekstiruutu edellisestä viisastelusta.
 
 		if (Mouse.IsCursorOn (elamansuola)) 
@@ -658,64 +704,55 @@ public class Kinkkuhefe : PhysicsGame
 			MessageDisplay.MaxMessageCount = 0;
 		}
 
-		else if (Mouse.IsCursorOn (hksininen)) 
-		{
+		else if (Mouse.IsCursorOn (hksininen)) {
 			hksininen.Position = Mouse.PositionOnWorld;
 			MessageDisplay.Add ("Vähä kyrsää... Perus suomalaista!");
 			MessageDisplay.MaxMessageCount = 0;
 		}
 
-		else if (Mouse.IsCursorOn (jackdaniels)) 
-		{
+		else if (Mouse.IsCursorOn (jackdaniels)) {
 			jackdaniels.Position = Mouse.PositionOnWorld;
 			MessageDisplay.Add ("Sullahan on ihan kehittynyt maku.");
 			MessageDisplay.MaxMessageCount = 0;
 		}
 
-		else if (Mouse.IsCursorOn (kebabkastike)) 
-		{
+		else if (Mouse.IsCursorOn (kebabkastike)) {
 			kebabkastike.Position = Mouse.PositionOnWorld;
 			MessageDisplay.Add ("Oi että tää ei koskaan jätä kylmäks.");
 			MessageDisplay.MaxMessageCount = 0;
 		}
 
-		else if (Mouse.IsCursorOn (lanttu)) 
-		{
+		else if (Mouse.IsCursorOn (lanttu)) {
 			lanttu.Position = Mouse.PositionOnWorld;
 			MessageDisplay.Add ("Meidän kunnioitettu puheenjohtaja.");
 			MessageDisplay.MaxMessageCount = 0;
 		}
 
-		else if (Mouse.IsCursorOn (kossu)) 
-		{
+		else if (Mouse.IsCursorOn (kossu)) {
 			kossu.Position = Mouse.PositionOnWorld;
 			MessageDisplay.Add ("RAI RAI!");
 			MessageDisplay.MaxMessageCount = 0;
 		}
 
-		else if (Mouse.IsCursorOn (mandariini)) 
-		{
+		else if (Mouse.IsCursorOn (mandariini)) {
 			mandariini.Position = Mouse.PositionOnWorld;
 			MessageDisplay.Add ("Ootsää mies vai hanhi?");
 			MessageDisplay.MaxMessageCount = 0;
 		}
 
-		else if (Mouse.IsCursorOn (marsipaani)) 
-		{
+		else if (Mouse.IsCursorOn (marsipaani)) {
 			marsipaani.Position = Mouse.PositionOnWorld;
 			MessageDisplay.Add ("Herkkuperse!");
 			MessageDisplay.MaxMessageCount = 0;
 		}
 
-		else if (Mouse.IsCursorOn (rakuuna)) 
-		{
+		else if (Mouse.IsCursorOn (rakuuna)) {
 			rakuuna.Position = Mouse.PositionOnWorld;
 			MessageDisplay.Add ("Ei susta kyllä kokkia tule.");
 			MessageDisplay.MaxMessageCount = 0;
 		}
 
-		else if (Mouse.IsCursorOn (msmjauhe)) 
-		{
+		else if (Mouse.IsCursorOn (msmjauhe)) {
 			msmjauhe.Position = Mouse.PositionOnWorld;
 			MessageDisplay.Add ("Et taida tietää mitä tää on...");
 			MessageDisplay.MaxMessageCount = 0;
@@ -727,47 +764,41 @@ public class Kinkkuhefe : PhysicsGame
 			MessageDisplay.MaxMessageCount = 0;
 		}
 
-		else if (Mouse.IsCursorOn (mustakitaturska)) 
-		{
+		else if (Mouse.IsCursorOn (mustakitaturska)) {
 			mustakitaturska.Position = Mouse.PositionOnWorld;
 			MessageDisplay.Add ("Olen erittäin pahanmakuinen.");
 			MessageDisplay.MaxMessageCount = 0;
 		}
 
-		else if (Mouse.IsCursorOn (mustapippuri)) 
-		{
+		else if (Mouse.IsCursorOn (mustapippuri)) {
 			mustapippuri.Position = Mouse.PositionOnWorld;
 			MessageDisplay.Add ("Turvallisin vaihtoehto... Vässykkä.");
 			MessageDisplay.MaxMessageCount = 0;
 		}
 
-		else if (Mouse.IsCursorOn (sukkahousut)) 
-		{
+		else if (Mouse.IsCursorOn (sukkahousut)) {
 			sukkahousut.Position = Mouse.PositionOnWorld;
 			MessageDisplay.Add ("Kannattaa kääriä kinkku tähän ettei kuivu.");
 			MessageDisplay.MaxMessageCount = 0;
 		}
 
-		else if (Mouse.IsCursorOn (tilli)) 
-		{
+		else if (Mouse.IsCursorOn (tilli)) {
 			tilli.Position = Mouse.PositionOnWorld;
 			MessageDisplay.Add ("Vaimo taas laittanu tillilihaa...");
 			MessageDisplay.MaxMessageCount = 0;
 		}
 
-		else if (Mouse.IsCursorOn (radio)) 
-		{
+		else if (Mouse.IsCursorOn (radio)) {
 			MessageDisplay.Add ("JOHN CENAAA");
 			MessageDisplay.MaxMessageCount = 0;
 		}
-
 	}
 		
-
-	// LUODAAN OBJEKTEISTA LISTA & LISÄTÄÄN KAIKKI OBJEKTIT PELIIN
+	/// <summary>
+	/// LUODAAN OBJEKTEISTA LISTA JA LISÄTÄÄN KAIKKI OBJEKTIT PELIIN
+	/// </summary>
 	void Ainekset(List<PhysicsObject> ainekset)
 	{
-		
 		// THÖ RADIO
 		radio = PhysicsObject.CreateStaticObject(Level.Width * 0.3, Level.Height * 0.2);
 		radio.Image = LoadImage("radio");											// Lisätään radio taustalle
@@ -885,5 +916,4 @@ public class Kinkkuhefe : PhysicsGame
 		ainekset.Add (tilli);
 		Add (tilli, 1);
 	}
-		
 }
